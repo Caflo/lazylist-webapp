@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- import di classi Java -->
+<%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.DecimalFormat"%>
+
+<!-- pagina per la gestione di errori -->
+<%@ page errorPage="../errors/failure.jsp"%>
+
+<!-- accesso alla sessione -->
+<%@ page session="true"%>
+
   <head>
     <title>Carrello</title>
     <meta charset="utf-8">
@@ -33,178 +44,88 @@
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
-						        <th>Nome Prodotto</th>
-						        <th>Prezzo</th>
-						        <th>Quantita</th>
-								<th>Sconto</th>
-								<th>Totale</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-						      <tr class="text-center">
-						        <td class="product-remove">
-									<form action="carrelloController" method="POST">					
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden; width: 27.23px; height: 30;" type="submit" name="eliminaDalCarrello">
-											<a>
-												<span class="ion-ios-close"></span>
-											</a>
-										</button>									
-									</form>
-								</td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/product-1.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Peperoni</h3>
-						        </td>
-						        
-						        <td class="price">€2.50</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-							  	<td class="sconto">25%</td>
-						        <td class="total">€1.90</td>
-						      </tr><!-- END TR-->
+	    			<div class="col-md-12 ftco-animate">
+	    				<div class="cart-list">
+		    				<table class="table">
+							    <thead class="thead-primary">
+							      <tr class="text-center">
+							        <th>&nbsp;</th>
+							        <th>&nbsp;</th>
+							        <th>Nome Prodotto</th>
+							        <th>Prezzo unitario</th>
+							        <th>Quantita</th>
+									<th>Sconto</th>
+									<th>Subtotale riga</th>
+							      </tr>
+							    </thead>
+							    <tbody>
+							    <%
+								    Carrello c = (Carrello) session.getAttribute("carrello");
+									DecimalFormat decF = new DecimalFormat("0.00");
 
-						      <tr class="text-center">
-						        <td class="product-remove"><form action="carrelloController" method="POST">					
-									<form action="carrelloController" method="POST">					
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden; outline:none;" type="submit" name="eliminaDalCarrello">
-											<a>
-												<span class="ion-ios-close"></span>
-											</a>
-										</button>									
-									</form>
-								</td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/prosciuttoParma.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Prosciutto di Parma</h3>
-	
-						        </td>
-						        
-						        <td class="price">€4.00</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-								
-							  	<td class="sconto"></td>
-						        <td class="total">4.00</td>
-							  </tr>
-							  <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/latteGranarolo.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Latte Granarolo</h3>
-	
-						        </td>
-						        
-						        <td class="price">€1.65</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-								
-							  	<td class="sconto"></td>
-						        <td class="total">1.65</td>
-						      </tr><!-- END TR-->
-						    </tbody>
-						  </table>
-					  </div>
+							    	if (c != null) { //altrimenti niente
+										for (RigaCarrello r : c.getRighe()) {
+							    %>
+							      <tr class="text-center">
+							        <td class="product-remove">
+										<form action="carrelloController" method="POST">
+											<input type="text" name="nomeProdotto" value="<%= r.getNomeProdotto() %>" hidden/>					
+											<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden; width: 27.23px; height: 30;" type="submit" name="tipoOperazione" value="eliminaDalCarrello">
+												<a>
+													<span class="ion-ios-close"></span>
+												</a>
+											</button>									
+										</form>
+									</td>
+							        
+							        <td class="image-prod"><div class="img" style="background-image:url(images/foodImage.png);"></div></td>
+							        
+							        <td class="product-name">
+							        	<h3><%= r.getNomeProdotto() %></h3>
+							        </td>
+							        
+							        <td class="price">&euro; <%= decF.format(r.getPrezzoUnitario()) %></td>
+							        
+							        <td class="quantity">
+							        	<div class="input-group mb-3">
+							        	<form action="carrelloController" method="POST">
+							        		<input type="text" name="nomeProdotto" value="<%= r.getNomeProdotto() %>" hidden/>					        	
+						             		<input type="text" name="quantity" class="quantity form-control input-number" value="<%= r.getQuantitaScelta() %>" >
+						             		<br />
+											<button class="btn btn-primary py-3 px-4" type="submit" name="tipoOperazione" value="modificaQuantita">Modifica
+											</button>									
+										</form>
+						          	</div>
+						          </td>
+								  	<td class="sconto"><%= r.getSconto() * 100 %> &percnt;</td>
+								  	<!--  Subtotale riga: non esiste nel modello del dominio e ce lo calcoliamo -->
+							        <td class="total">&euro; <%= decF.format(r.getPrezzoUnitario() * (1 - r.getSconto()) * r.getQuantitaScelta()) %></td>
+							      </tr><!-- END TR-->
+							      
+							      <%
+							      		}
+							    	}
+							      %>
+							      
+							    </tbody>
+							  </table>
+						  </div>
+					</div>
     			</div>
-    		</div>
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Totale Carrello</h3>
-    					<p class="d-flex">
-    						<span>Totale Prodotti</span>
-    						<span>€8.15</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Totale Sconto </span>
-    						<span>€0.60</span>
-    					</p>
-    					<hr>
     					<p class="d-flex total-price">
-    						<span>Totale</span>
-    						<span>€7.55</span>
+    						<span>Subtotale carrello</span>
+    						<span>&euro; <%= decF.format(c.getSubTotale()) %></span>
     					</p>
     				</div>
-    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Procedi all'ordine</a></p>
+    				<p><a href="ordineController" class="btn btn-primary py-3 px-4">Procedi all'ordine</a></p>
     			</div>
-    		</div>
 			</div>
 		</section>
-    <footer class="ftco-footer ftco-section">
-		<div class="container">
-			<div class="row">
-				<div class="mouse">
-						  <a href="#" class="mouse-icon">
-							  <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						  </a>
-					  </div>
-			</div>
-		  <div class="row mb-5">
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4">
-				<h2 class="ftco-heading-2">LazyList</h2>
-				<p>La spesa,  a casa tua</p>
-				
-			  </div>
-			</div>
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4 ml-md-5">
-				<h2 class="ftco-heading-2">Menu</h2>
-				<ul class="list-unstyled">
-				  <li><a href="#" class="py-2 d-block">Catalogo</a></li>
-				  <li><a href="#" class="py-2 d-block">Carrello</a></li>
-				  <li><a href="#" class="py-2 d-block">Storico Ordini</a></li>
-				  <li><a href="#" class="py-2 d-block">Info Account</a></li>
-				</ul>
-			  </div>
-			</div>
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4">
-				  <h2 class="ftco-heading-2">Domande?</h2>
-				  <div class="block-23 mb-3">
-					<ul>
-					  <li><span class="icon icon-map-marker"></span><span class="text"> Viale Risorgimento 2, Bologna, Italia</span></li>
-					  <li><a href="#"><span class="icon icon-phone"></span><span class="text">+39 123 4567890</span></a></li>
-					  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-					</ul>
-				  </div>
-			  </div>
-			</div>
-		  </div>
-		  <div class="row">
-			<div class="col-md-12 text-center">
-  
-			 
-			</div>
-		  </div>
-		</div>
-	  </footer>
-    
-  
-
+   
+	<%@ include file="fragments/footerCliente.html"%>
+   
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 

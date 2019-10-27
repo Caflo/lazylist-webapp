@@ -90,12 +90,13 @@
 				
 				<%
 					Catalogo c = (Catalogo) session.getAttribute("catalogo");
-					DecimalFormat decF = new DecimalFormat("#.##");
+					DecimalFormat decF = new DecimalFormat("0.00");
 					for (Prodotto p : c.getProdotti()) {
 				%>
+				
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg"
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/foodImage.png"
 								alt="Colorlib Template">
 							<span class="status"><%= p.getSconto() * 100%>&percnt;</span>
 							<span class="flag"><img class="flagImage" height="32" width="32"
@@ -114,7 +115,7 @@
 								<div class="m-auto d-flex">
 									<form id="aggiuntaCarrello" action="carrelloController" method="POST">
 										<input type="text" name="nomeProdotto" value="<%=p.getNome()%>" hidden/>
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
+										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit" name="tipoOperazione" value="aggiungiAlCarrello">
 											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
 												<span><i class="ion-ios-cart"></i></span>
 											</a>

@@ -54,7 +54,7 @@ public class testInserisciOrdine {
 
 		//Cose che servono per costruire l'ordine
 		FasciaOraria f = new FasciaOraria();
-		f.setGiorno(DayOfWeek.THURSDAY);
+		f.setGiorno("giovedi");
 		f.setOraInizio("16:00");
 		f.setOraFine("16:30");
 		f.setCostoConsegna(2.50);

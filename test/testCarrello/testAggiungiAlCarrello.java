@@ -33,7 +33,7 @@ public class testAggiungiAlCarrello {
 		
 		RigaCarrello riga = new RigaCarrello();
 		riga.setIdProdotto(p.get_id().toString());
-		riga.setNomeprodotto(p.getNome());
+		riga.setNomeProdotto(p.getNome());
 		riga.setQuantitaScelta(1);
 		riga.setPrezzoUnitario(p.getPrezzo());
 		

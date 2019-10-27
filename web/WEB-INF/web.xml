@@ -58,5 +58,14 @@
 		<url-pattern>/visualizzazioneProdottiController</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>OrdineController</servlet-name>
+		<servlet-class>gestioneCliente.OrdineController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OrdineController</servlet-name>
+		<url-pattern>/ordineController</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>

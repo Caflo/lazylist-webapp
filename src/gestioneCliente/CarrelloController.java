@@ -57,34 +57,48 @@ public class CarrelloController extends HttpServlet {
 	
 		HttpSession session = req.getSession();
 	
-//		String tipoOperazione = req.getParameter("");
+		String tipoOperazione = req.getParameter("tipoOperazione");
+		
+		//Switch
+		if (tipoOperazione.equals("aggiungiAlCarrello")) {
+			String nomeProdotto = req.getParameter("nomeProdotto");
+			this.aggiungiAlCarrello(nomeProdotto);
+			resp.sendRedirect(req.getContextPath() + "/index.jsp");
+		}
+		else if (tipoOperazione.equals("eliminaDalCarrello")) {
+			String nomeProdotto = req.getParameter("nomeProdotto");
+			this.eliminaDalCarrello(nomeProdotto);
+			// Passo di nuovo alla doGet che reimpostera' il carrello
+			resp.sendRedirect(req.getContextPath() + "/carrelloController");
+		}
+		else if (tipoOperazione.equals("modificaQuantita")) {
+			String nomeProdotto = req.getParameter("nomeProdotto");
+			Integer nuovaQuantita = Integer.parseInt(req.getParameter("quantity"));
+			this.modificaQuantita(nomeProdotto, nuovaQuantita);
+			// Passo di nuovo alla doGet che reimpostera' il carrello
+			resp.sendRedirect(req.getContextPath() + "/carrelloController");
+		}
+		
+//		String nomeProdotto = req.getParameter("nomeProdotto");
+//		this.aggiungiAlCarrello(nomeProdotto);
 //		
-//		//Switch
-//		if (tipoOperazione.equals("aggiungiAlCarrello")) {
-//			String nomeProdotto = req.getParameter("nomeProdotto");
-//			this.aggiungiAlCarrello(nomeProdotto);
-//		}
-//		else if (tipoOperazione.equals("eliminaDalCarrello")) {
-//			String nomeProdotto = req.getParameter("nomeProdotto");
-//			this.eliminaDalCarrello(nomeProdotto);
-//		}
-//		else if (tipoOperazione.equals("modificaQuantita")) {
-//			String nomeProdotto = req.getParameter("nomeProdotto");
-//			Integer nuovaQuantita = Integer.parseInt(req.getParameter("nuovaQuantita"));
-//
-//			this.modificaQuantita(nomeProdotto, nuovaQuantita);
-//		}
-		
-		String nomeProdotto = req.getParameter("nomeProdotto");
-		this.aggiungiAlCarrello(nomeProdotto);
-		
-		resp.sendRedirect(req.getContextPath() + "/index.jsp");
 		
 	}
 	
-	private void eliminaDalCarrello(String nomeProdotto) {
-		// TODO Auto-generated method stub
-		
+	private void eliminaDalCarrello(String nomeProdotto) {	
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+			
+			//Eliminazione
+			DBCollection collection = database.getCollection("carrello");
+			BasicDBObject deleteQuery = new BasicDBObject();
+	        deleteQuery.put("nomeProdotto", nomeProdotto);
+	        collection.remove(deleteQuery);
+    
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}	
 	}
 
 	public Carrello mostraCarrello() {

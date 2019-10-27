@@ -22,12 +22,6 @@ public class RigaCarrello {
 	public void setNomeProdotto(String nomeProdotto) {
 		this.nomeProdotto = nomeProdotto;
 	}
-	public String getNomeprodotto() {
-		return nomeProdotto;
-	}
-	public void setNomeprodotto(String nomeProdotto) {
-		this.nomeProdotto = nomeProdotto;
-	}
 	public Integer getQuantitaScelta() {
 		return quantitaScelta;
 	}
