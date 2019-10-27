@@ -30,6 +30,33 @@
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css"> 
 
+	<script type="text/javascript">
+		function addToCart(nomeProdotto){
+
+			alert(nomeProdotto);
+
+		}
+		function myGetElementById(idElemento) {
+
+			// elemento da restituire
+			var elemento;
+
+			// se esiste il metodo getElementById questo if sara'� 
+			// diverso da false, null o undefined
+			// e sara'� quindi considerato valido, come un true
+			if ( document.getElementById )
+				elemento = document.getElementById(idElemento);
+
+			// altrimenti e' necessario usare un vecchio sistema
+			else
+				elemento = document.all[idElemento];
+
+			// restituzione elemento
+			return elemento;
+
+			} // myGetElementById()
+	</script>
+
 </head>
 
 <body class="goto-here">
@@ -46,6 +73,7 @@
 		</div>
 		<div class="container">
 			<div class="row">
+				
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg"
@@ -56,7 +84,7 @@
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Peperoni</a></h3>
+							<h3 id="nomeProdotto">Peperoni</h3>
 							<div class="d-flex">
 								<div class="pricing">
 									<p class="price"><span class="mr-2 price-dc">€2.50/Kg</span><span
@@ -65,21 +93,19 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
+									<form id="aggiuntaCarrello" action="nomeServlet.java" method="POST">
+										<input type="text" name="nomeProdotto" value="Peperoni" hidden/>
+										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
+											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
+												<span><i class="ion-ios-cart"></i></span>
+											</a>
+										</button>
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/latteGranarolo.jpg"
@@ -89,7 +115,7 @@
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Latte Granarolo</a></h3>
+							<h3>Latte Granarolo</h3>
 							<div class="d-flex">
 								<div class="pricing">
 									<p class="price"><span>€1.65</span></p>
@@ -97,21 +123,19 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
+									<form id="aggiuntaCarrello" action="nomeServlet.java" method="POST">
+										<input type="text" name="nomeProdotto" value="Latte Granarolo" hidden/>
+										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
+											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
+												<span><i class="ion-ios-cart"></i></span>
+											</a>
+										</button>
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/ancoraUno.jpg"
@@ -129,21 +153,19 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
+									<form id="aggiuntaCarrello" action="nomeServlet.java" method="POST">
+										<input type="text" name="nomeProdotto" value="Ancora Uno Tre Marie" hidden/>
+										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
+											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
+												<span><i class="ion-ios-cart"></i></span>
+											</a>
+										</button>
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/prosciuttoParma.jpg"
@@ -175,9 +197,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-
-
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-5.jpg"
@@ -197,21 +217,14 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
 										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
 									</a>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/salsicce.jpg"
@@ -243,7 +256,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/acquaSanBernardo.jpg"
@@ -275,7 +288,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div><!--end div-->
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<!-- <span class="flag"><img class="flagImage" src="images/italia.jpg"></span> -->
@@ -310,7 +323,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> <!--end div-->
 			</div>
 		</div>
 	</section>
