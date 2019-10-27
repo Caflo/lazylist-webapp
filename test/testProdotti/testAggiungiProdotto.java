@@ -17,11 +17,10 @@ public class testAggiungiProdotto {
 	public void test() {
 		//Prodotto di prova
 		Prodotto p = new Prodotto();
-		p.setNome("Peperoni");
+		p.setNome("Yoghurt greco 100gr");
 		p.setMarca("Delta");
 		p.setCategoria("Latticini");
 		p.setProvenienza("Grecia");
-		p.setPeso(0.10);
 		p.setPrezzo(1.50);
 		p.setSconto(0.20);
 		p.setUnitaDisponibili(11);
@@ -38,7 +37,6 @@ public class testAggiungiProdotto {
 	        document.put("marca", p.getMarca());
 	        document.put("categoria", p.getCategoria());
 	        document.put("provenienza", p.getProvenienza());
-	        document.put("peso", p.getPeso());
 	        document.put("prezzo", p.getPrezzo());
 	        document.put("sconto", p.getSconto());
 	        document.put("unitaDisponibili", p.getUnitaDisponibili());

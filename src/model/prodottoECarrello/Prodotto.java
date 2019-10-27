@@ -9,7 +9,6 @@ public class Prodotto {
 	private String categoria;
 	private String marca;
 	private String provenienza;
-	private Double peso; //generalmente in KG, nella view nel caso di bevande vengono trasformati in LT
 	private Double prezzo;
 	private Double sconto; //0.70 --> nella view = 70%
 	private Integer unitaDisponibili;
@@ -46,12 +45,7 @@ public class Prodotto {
 	public void setProvenienza(String provenienza) {
 		this.provenienza = provenienza;
 	}
-	public Double getPeso() {
-		return peso;
-	}
-	public void setPeso(Double peso) {
-		this.peso = peso;
-	}
+	
 	public Double getPrezzo() {
 		return prezzo;
 	}

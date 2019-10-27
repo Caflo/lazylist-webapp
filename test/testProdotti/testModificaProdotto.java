@@ -23,7 +23,6 @@ public class testModificaProdotto {
 		nuovoP.setMarca("Delta");
 		nuovoP.setCategoria("Latticini");
 		nuovoP.setProvenienza("Grecia");
-		nuovoP.setPeso(0.10);
 		nuovoP.setPrezzo(1.50);
 		nuovoP.setSconto(0.20);
 		nuovoP.setUnitaDisponibili(200);
@@ -42,7 +41,6 @@ public class testModificaProdotto {
 	        newDocument.put("marca", nuovoP.getMarca());
 	        newDocument.put("categoria", nuovoP.getCategoria());
 	        newDocument.put("provenienza", nuovoP.getProvenienza());
-	        newDocument.put("peso", nuovoP.getPeso());
 	        newDocument.put("prezzo", nuovoP.getPrezzo());
 	        newDocument.put("sconto", nuovoP.getSconto());
 	        newDocument.put("unitaDisponibili", nuovoP.getUnitaDisponibili());

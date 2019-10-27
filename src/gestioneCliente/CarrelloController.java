@@ -78,9 +78,6 @@ public class CarrelloController extends HttpServlet {
 		String nomeProdotto = req.getParameter("nomeProdotto");
 		this.aggiungiAlCarrello(nomeProdotto);
 		
-		//In ogni caso mostro il carrello. Questo serve alla JSP che si riprendera' il carrello con session.getAttribute("carrello")
-		Carrello c = mostraCarrello();
-		session.setAttribute("carrello", c);
 		resp.sendRedirect(req.getContextPath() + "/index.jsp");
 		
 	}
@@ -120,8 +117,8 @@ public class CarrelloController extends HttpServlet {
 		}
 		
 		Carrello c = new Carrello();
-		c.setSubTotale(result.stream().mapToDouble(x -> x.getPrezzoUnitario() * x.getQuantitaScelta()).sum());
 		c.setRighe(result);
+		c.setSubTotale(result.stream().mapToDouble(x -> (x.getPrezzoUnitario() * (1 - x.getSconto())) * x.getQuantitaScelta()).sum());
 		
 		return c;
 	}
@@ -163,7 +160,7 @@ public class CarrelloController extends HttpServlet {
 		        document.put("nomeProdotto", nomeProdotto);
 		        document.put("quantitaScelta", 1);
 		        document.put("prezzoUnitario", p.getPrezzo());
-		        document.put("pesoTotaleProdotto", p.getPeso());
+		        document.put("sconto", p.getSconto());
 		        collectionC.insert(document);
 		        
 		        //Automaticamente mongoDB inserira' anche un campo _id ma nel carrello me ne sbatto altamente, non mi serve

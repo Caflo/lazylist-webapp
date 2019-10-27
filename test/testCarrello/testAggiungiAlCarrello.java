@@ -22,11 +22,10 @@ public class testAggiungiAlCarrello {
 		//Prodotto di prova
 		Prodotto p = new Prodotto();
 		p.set_id(idProdotto);
-		p.setNome("Yoghurt greco");
+		p.setNome("Yoghurt greco 100gr");
 		p.setMarca("Delta");
 		p.setCategoria("Latticini");
 		p.setProvenienza("Grecia");
-		p.setPeso(0.10);
 		p.setPrezzo(1.50);
 		p.setSconto(0.20);
 		p.setUnitaDisponibili(11);
@@ -37,7 +36,6 @@ public class testAggiungiAlCarrello {
 		riga.setNomeprodotto(p.getNome());
 		riga.setQuantitaScelta(1);
 		riga.setPrezzoUnitario(p.getPrezzo());
-		riga.setPesoTotaleProdotto(p.getPeso());
 		
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);
@@ -50,7 +48,7 @@ public class testAggiungiAlCarrello {
 	        document.put("nomeProdotto", p.getNome());
 	        document.put("quantitaScelta", 1);
 	        document.put("prezzoUnitario", p.getPrezzo());
-	        document.put("pesoTotaleProdotto", p.getPeso());
+	        document.put("sconto", p.getSconto());
 	        
 	        //Automaticamente mongoDB inserirà anche un campo _id ma nel carrello me ne sbatto altamente, non mi serve
 

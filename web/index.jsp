@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- import di classi Java -->
+<%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.DecimalFormat"%>
+
+<!-- pagina per la gestione di errori -->
+<%@ page errorPage="../errors/failure.jsp"%>
+
+<!-- accesso alla sessione -->
+<%@ page session="true"%>
+
+<!-- PAGINA HTML -->
 
 <head>
 	<title>LazyList - La spesa direttamente a casa tua</title>
@@ -41,9 +53,9 @@
 			// elemento da restituire
 			var elemento;
 
-			// se esiste il metodo getElementById questo if sara'� 
+			// se esiste il metodo getElementById questo if sara'ï¿½ 
 			// diverso da false, null o undefined
-			// e sara'� quindi considerato valido, come un true
+			// e sara'ï¿½ quindi considerato valido, come un true
 			if ( document.getElementById )
 				elemento = document.getElementById(idElemento);
 
@@ -61,40 +73,47 @@
 
 <body class="goto-here">
 	<%@ include file="fragments/headerCliente.html"%>	
+	
+	
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center mb-3 pb-3">
 				<div class="col-md-12 heading-section text-center ftco-animate">
 					<span class="subheading">Prodotti Offerti</span>
 					<h2 class="mb-4">Il nostro catalogo</h2>
-					<p>Prodotti tipici di prima qualità direttamente a casa sua</p>
+					<p>Prodotti tipici di prima qualità  direttamente a casa tua</p>
 				</div>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
 				
+				<%
+					Catalogo c = (Catalogo) session.getAttribute("catalogo");
+					DecimalFormat decF = new DecimalFormat("#.##");
+					for (Prodotto p : c.getProdotti()) {
+				%>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg"
 								alt="Colorlib Template">
-							<span class="status">25%</span>
+							<span class="status"><%= p.getSconto() * 100%>&percnt;</span>
 							<span class="flag"><img class="flagImage" height="32" width="32"
 									src="images/italia.jpg"></span>
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
-							<h3 id="nomeProdotto">Peperoni</h3>
+							<h3 id="nomeProdotto"><%= p.getNome() %></h3>
 							<div class="d-flex">
 								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">€2.50/Kg</span><span
-											class="price-sale">€1.90</span></p>
+									<p class="price"><span class="mr-2 price-dc"><%= decF.format(p.getPrezzo()) %></span>
+									<span class="price-sale">&euro;<%= decF.format(p.getPrezzo() * (1 - p.getSconto())) %></span></p>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
 									<form id="aggiuntaCarrello" action="carrelloController" method="POST">
-										<input type="text" name="nomeProdotto" value="Peperoni" hidden/>
+										<input type="text" name="nomeProdotto" value="<%=p.getNome()%>" hidden/>
 										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
 											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
 												<span><i class="ion-ios-cart"></i></span>
@@ -106,226 +125,12 @@
 						</div>
 					</div>
 				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/latteGranarolo.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3>Latte Granarolo</h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€1.65</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<form id="aggiuntaCarrello" action="nomeServlet.java" method="POST">
-										<input type="text" name="nomeProdotto" value="Latte Granarolo" hidden/>
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
-											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
-												<span><i class="ion-ios-cart"></i></span>
-											</a>
-										</button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/ancoraUno.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Ancora Uno Tre Marie</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€3.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<form id="aggiuntaCarrello" action="nomeServlet.java" method="POST">
-										<input type="text" name="nomeProdotto" value="Ancora Uno Tre Marie" hidden/>
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit">
-											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
-												<span><i class="ion-ios-cart"></i></span>
-											</a>
-										</button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/prosciuttoParma.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Prosciutto di Parma</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€4.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-5.jpg"
-								alt="Colorlib Template">
-							<span class="status">30%</span>
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Pomodoro</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">€3.00</span><span
-											class="price-sale">€2.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/salsicce.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Salsicce</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€6.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/acquaSanBernardo.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Acqua San Bernardo (x6)</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€1.75</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end div-->
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<!-- <span class="flag"><img class="flagImage" src="images/italia.jpg"></span> -->
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/pane.jpg"
-								alt="Colorlib Template">
-							<span class="flag"><img class="flagImage" height="32" width="32"
-									src="images/italia.jpg"></span>
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Pane Pugliese</a></h3>
-							<p>500gr</p>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>€2.30</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> <!--end div-->
-			</div>
-		</div>
+			
+				<%
+					}
+				%>
+			</div> <!-- end row -->
+		</div> <!-- end container -->
 	</section>
 
 	<%@ include file="fragments/footerCliente.html"%>

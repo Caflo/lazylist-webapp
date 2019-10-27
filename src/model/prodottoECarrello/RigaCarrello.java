@@ -8,8 +8,7 @@ public class RigaCarrello {
 	private String nomeProdotto;
 	private Integer quantitaScelta;
 	private Double prezzoUnitario;
-	private Double pesoTotaleProdotto;
-	
+	private Double sconto;
 	
 	public String getIdProdotto() {
 		return idProdotto;
@@ -41,11 +40,10 @@ public class RigaCarrello {
 	public void setPrezzoUnitario(Double prezzoUnitario) {
 		this.prezzoUnitario = prezzoUnitario;
 	}
-	public Double getPesoTotaleProdotto() {
-		return pesoTotaleProdotto;
+	public Double getSconto() {
+		return sconto;
 	}
-	public void setPesoTotaleProdotto(Double pesoTotaleProdotto) {
-		this.pesoTotaleProdotto = pesoTotaleProdotto;
+	public void setSconto(Double sconto) {
+		this.sconto = sconto;
 	}
-	
 }

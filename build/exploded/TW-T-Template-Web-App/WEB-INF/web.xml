@@ -22,8 +22,8 @@
 	<!-- Welcome pages -->
 	<!-- Tomcat "tenta" in automatico le index.html e index.jsp -->
 
-	 <welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+	<welcome-file-list>
+		<welcome-file>visualizzazioneProdottiController</welcome-file>
 	</welcome-file-list>
 
 	<!-- Handle exceptions and errors -->
@@ -48,5 +48,15 @@
 		<servlet-name>CarrelloController</servlet-name>
 		<url-pattern>/carrelloController</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VisualizzazioneProdottiController</servlet-name>
+		<servlet-class>gestioneCliente.VisualizzazioneProdottiController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VisualizzazioneProdottiController</servlet-name>
+		<url-pattern>/visualizzazioneProdottiController</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>
