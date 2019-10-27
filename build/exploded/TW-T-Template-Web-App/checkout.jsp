@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- import di classi Java -->
+<%@ page import="model.ordine.*"%>
+<%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.DecimalFormat"%>
+
+<!-- pagina per la gestione di errori -->
+<%@ page errorPage="../errors/failure.jsp"%>
+
+<!-- accesso alla sessione -->
+<%@ page session="true"%>
+
   <head>
     <title>Checkout</title>
     <meta charset="utf-8">
@@ -29,90 +41,52 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body class="goto-here">
-	<div class="py-1 bg-primary">
-    	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-	    		<div class="col-lg-12 d-block">
-		    		<div class="row d-flex">
-		    			<div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+39 123 4567890</span>
-					    </div>
-					    <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">youremail@email.com</span>
-					    </div>
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-						    <span class="text">Spedizione giornaliera nella data e nell'ora da lei scelta</span>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		  </div>
-    </div>
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-			
-	      	<a class="navbar-brand" href="index.html"><img heigth="100px" width="100px" src="images\logo.png"></a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
+	<%@ include file="fragments/headerCliente.html"%>	
 
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.html" class="nav-link">Catalogo</a></li>
-			  <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-			  <li class="nav-item"><a href="contact.html" class="nav-link">Storico Ordini</a></li>
-			  <li class="nav-item"><a href="blog.html" class="nav-link">Info Account</a></li>
-			  
-
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- END nav -->
-
+	<%
+		Carrello c = (Carrello) session.getAttribute("carrello"); //quando accedo per la prima volta all'ordine sicuramente ce l'ho
+		DecimalFormat decF = new DecimalFormat("0.00");
+	 %>
+	 
     <section class="ftco-section">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
-						<form action="#" class="billing-form">
+						<form action="/ordineController" class="billing-form">
 							<h3 class="mb-4 billing-heading">Dettaglio Ordine</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="firstname">Email</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" name="email" placeholder="">
 	                </div>
 				  </div>
 				  <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Indirizzo di consegna</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" name="indirizzo" placeholder="">
 	                </div>
 					</div>
 					<div class="w-100"></div>
-		            <div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="phone">Numero Civico</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-				  </div>
 				  <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="towncity">CAP</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" name="CAP" placeholder="">
 	                </div>
 		            </div>
 					<div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Inserisci data di consegna</label>
-	                  <input type="text" class="form-control" placeholder="gg/mm/aaaa">
+	                  <input id="data" type="text" class="form-control" name="dataConsegna" placeholder="gg/mm/aaaa">
 	                </div>
 					</div>
+					<br> <!-- Il bottone eseguirà una funzione AJAX (qui è necessario purtroppo) -->
+					<button class="btn btn-primary py-3 px-4" onClick="cercaFasceDisponibili(myGetElementById('data'), myGetElementById('comboBoxFasce'))">Cerca date disponibili
+					</button>
+					<br>
 					
                 <div class="w-100"></div>
 		            <div class="col-md-12">
@@ -120,13 +94,8 @@
 		            		<label for="country">Fascia Oraria</label>
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="" class="form-control">
-		                  	<option value="">8.00-9.00</option>
-							<option value="">9.00-10.00</option>
-		                    <option value="">10.00-11.00</option>
-		                    <option value="">15.00-16.00</option>
-		                    <option value="">15.00-16.00</option>
-		                    <option value="">16.00-17.00</option>
+		                  <select name="" id="comboBoxFasce" class="form-control">
+		                  	<!-- verrà riempita quando si sceglierà la data -->
 		                  </select>
 		                </div>
 		            	</div>
@@ -135,11 +104,10 @@
                 <div class="col-md-12">
                 	<div class="form-group mt-4">
 										
-									</div>
+					</div>
                 </div>
 	            </div>
-	          </form><!-- END -->
-					</div>
+	          
 					<div class="col-xl-5">
 	          <div class="row mt-5 pt-3">
 	          	<div class="col-md-12 d-flex mb-5">
@@ -151,12 +119,12 @@
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Spedizione</span>
-		    						<span>â‚¬3.50</span>
+		    						<span id="costoSpedizione">â‚¬3.50</span>
 		    					</p>
 		    					<hr>
 		    					<p class="d-flex total-price">
 		    						<span>Total</span>
-		    						<span>â‚¬11.05</span>
+		    						<span id="totale">â‚¬11.05</span>
 		    					</p>
 								</div>
 	          	</div>
@@ -182,61 +150,13 @@
 	          	</div>
 	          </div>
           </div> <!-- .col-md-8 -->
+          </form><!-- END -->
+		</div>
         </div>
       </div>
     </section> <!-- .section -->
 
-    <footer class="ftco-footer ftco-section">
-		<div class="container">
-			<div class="row">
-				<div class="mouse">
-						  <a href="#" class="mouse-icon">
-							  <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						  </a>
-					  </div>
-			</div>
-		  <div class="row mb-5">
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4">
-				<h2 class="ftco-heading-2">LazyList</h2>
-				<p>La spesa,  a casa tua</p>
-				
-			  </div>
-			</div>
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4 ml-md-5">
-				<h2 class="ftco-heading-2">Menu</h2>
-				<ul class="list-unstyled">
-				  <li><a href="#" class="py-2 d-block">Catalogo</a></li>
-				  <li><a href="#" class="py-2 d-block">Carrello</a></li>
-				  <li><a href="#" class="py-2 d-block">Storico Ordini</a></li>
-				  <li><a href="#" class="py-2 d-block">Info Account</a></li>
-				</ul>
-			  </div>
-			</div>
-			<div class="col-md">
-			  <div class="ftco-footer-widget mb-4">
-				  <h2 class="ftco-heading-2">Domande?</h2>
-				  <div class="block-23 mb-3">
-					<ul>
-					  <li><span class="icon icon-map-marker"></span><span class="text"> Viale Risorgimento 2, Bologna, Italia</span></li>
-					  <li><a href="#"><span class="icon icon-phone"></span><span class="text">+39 123 4567890</span></a></li>
-					  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-					</ul>
-				  </div>
-			  </div>
-			</div>
-		  </div>
-		  <div class="row">
-			<div class="col-md-12 text-center">
-  
-			 
-			</div>
-		  </div>
-		</div>
-	  </footer>
-    
-  
+   
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
