@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Example jsp</title>
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/styles/mystyle.css"
+	type="text/css" />
+</head>
+<body>
+	<div id="container">
+
+
+		<div id="body">
+			<p>Quanti biglietti vuoi comprare?</p>
+			<hr />
+			<script src="scripts/forms.js" type="text/javascript"></script>
+			<fieldset><legend>form to compile</legend>
+			<form name="bigliettiForm" action="ticketServlet" method="post">
+			<label for="nBiglietti">Numero biglietti</label> 
+				<input type="text" name="nBiglietti" placeholder="Numero di biglietti"> <br />
+				<input type="submit" name="operazione" value="Acquista biglietti">				
+				<input type="submit" name="operazione" value="Finalizza acquisto">
+			</form>
+			
+			<form method="get" action="logoutServlet">
+				<input type="submit" name="operazione" value="Logout">				
+			</form>
+			
+			</fieldset>
+			<hr />
+		</div>
+		
+	</div>
+</body>
+</html>
