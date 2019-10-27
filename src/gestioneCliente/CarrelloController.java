@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -14,10 +15,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 
 import model.prodottoECarrello.Carrello;
 import model.prodottoECarrello.Prodotto;
@@ -41,8 +49,14 @@ public class CarrelloController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		// LA USO PER 
+		// *) Aggiungere i prodotto del carrello dal catalogo
+	
+		HttpSession session = req.getSession();
+		String nomeProdotto = req.getParameter("nomeProdotto");
+		this.aggiungiAlCarrello(nomeProdotto);
+		resp.sendRedirect(req.getContextPath() + "/index.html");
+		
 	}
 	
 	public Carrello mostraCarrello() {
@@ -61,59 +75,38 @@ public class CarrelloController extends HttpServlet {
 		
 	}
 	
-	public Boolean aggiungiAlCarrello(Prodotto p) {
-		Boolean result = Boolean.FALSE;
-		Gson gson = new Gson();
+	public void aggiungiAlCarrello(String nomeProdotto) {
+		
 		try {
-			RigaCarrello riga = new RigaCarrello();
-//			riga.setIdProdotto(p.getIdProdotto());
-			riga.setNomeprodotto(p.getNome());
-			riga.setPrezzoUnitario(p.getPrezzo());
-			riga.setPesoTotaleProdotto(p.getPeso());
-			riga.setQuantitaScelta(1); //aggiungo 1. Per modificare la quantita ci sarà la funzione a parte modificaQuantita()
-			carrello.getRighe().add(riga);
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
 			
-			JsonWriter writer = new JsonWriter(new FileWriter("files/carrello.json"));
-			writer.beginArray();
-			for (RigaCarrello rigaC : carrello.getRighe()) {
-				writer.beginObject();
-				writer.name("idProdotto").value(rigaC.getIdProdotto());
-				writer.name("nomeProdotto").value(rigaC.getNomeprodotto());
-				writer.name("prezzoUnitario").value(rigaC.getPrezzoUnitario());
-				writer.name("pesoTotale").value(rigaC.getPesoTotaleProdotto());
-				writer.name("quantitaScelta").value(rigaC.getQuantitaScelta());
-				writer.endObject();
-			}
-			writer.endArray();
-		} catch (IOException e) {
+			//Trovo il prodotto dal nome inviato dal client
+			DBCollection collectionP = database.getCollection("prodotti");
+			BasicDBObject searchQuery = new BasicDBObject();
+			searchQuery.put("nome", nomeProdotto);
+	        DBObject cursor = collectionP.findOne(searchQuery);
+	        Gson gson = new Gson();
+	        Prodotto p = gson.fromJson(cursor.toString(), Prodotto.class);
+			
+			//Inserimento
+			DBCollection collectionC = database.getCollection("carrello");
+	        BasicDBObject document = new BasicDBObject();
+	        document.put("idProdotto", p.get_id().toString()); //nelle righe carrello e in linea ordine lo metto come stringa
+	        document.put("nomeProdotto", nomeProdotto);
+	        document.put("quantitaScelta", 1);
+	        document.put("prezzoUnitario", p.getPrezzo());
+	        document.put("pesoTotaleProdotto", p.getPeso());
+	        
+	        //Automaticamente mongoDB inserira' anche un campo _id ma nel carrello me ne sbatto altamente, non mi serve
+
+	        collectionC.insert(document);
+	        
+		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		return result;
+		
 	}
-	
-	public Boolean eliminaProdotto(Integer idP) {
-		Boolean result = Boolean.FALSE;
-		Gson gson = new Gson();
-		try {
-			JsonReader reader = new JsonReader(new FileReader("files/carrello.json"));
-			Set<RigaCarrello> righe = gson.fromJson(reader, RigaCarrello.class);
-			JsonWriter writer = new JsonWriter(new FileWriter("files/carrello.json"));
-			writer.beginArray();		
-			for (RigaCarrello riga : righe) {
-				if (!riga.getIdProdotto().equals(idP)) { //scrivo tutte quelle che non hanno valore = idP
-					writer.beginObject();
-					writer.name("idProdotto").value(riga.getIdProdotto());
-					writer.name("nomeProdotto").value(riga.getNomeprodotto());
-					writer.name("prezzoUnitario").value(riga.getPrezzoUnitario());
-					writer.name("pesoTotale").value(riga.getPesoTotaleProdotto());
-					writer.name("quantitaScelta").value(riga.getQuantitaScelta());
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
+		
 
 }

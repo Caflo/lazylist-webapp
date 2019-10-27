@@ -23,7 +23,7 @@
 	<!-- Tomcat "tenta" in automatico le index.html e index.jsp -->
 
 	 <welcome-file-list>
-		<welcome-file>login.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 	<!-- Handle exceptions and errors -->
@@ -41,39 +41,12 @@
 	<!-- Define servlets that are included in the application -->
 
 	<servlet>
-		<servlet-name>TrovaIndirizzi</servlet-name>
-		<servlet-class>esame.servlets.TrovaIndirizzi</servlet-class>
+		<servlet-name>CarrelloController</servlet-name>
+		<servlet-class>gestioneCliente.CarrelloController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TrovaIndirizzi</servlet-name>
-		<url-pattern>/trovaIndirizzi</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>esame.servlets.LoginServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>LoginServlet</servlet-name>
-		<url-pattern>/loginServlet</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>TicketServlet</servlet-name>
-		<servlet-class>esame.servlets.TicketServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TicketServlet</servlet-name>
-		<url-pattern>/ticketServlet</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>LogoutServlet</servlet-name>
-		<servlet-class>esame.servlets.LogoutServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>LogoutServlet</servlet-name>
-		<url-pattern>/logoutServlet</url-pattern>
+		<servlet-name>CarrelloController</servlet-name>
+		<url-pattern>/carrelloController</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

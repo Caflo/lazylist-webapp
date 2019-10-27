@@ -17,7 +17,7 @@ public class testAggiungiProdotto {
 	public void test() {
 		//Prodotto di prova
 		Prodotto p = new Prodotto();
-		p.setNome("Yoghurt greco");
+		p.setNome("Peperoni");
 		p.setMarca("Delta");
 		p.setCategoria("Latticini");
 		p.setProvenienza("Grecia");

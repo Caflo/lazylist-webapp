@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="TW-T-Tickets" basedir=".." default="02.print.properties">
+<project name="TW-T-Template-Web-App" basedir=".." default="02.print.properties">
 
 	<!-- ================ -->
 	<!-- Properties setup -->
