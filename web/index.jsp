@@ -60,7 +60,7 @@
 </head>
 
 <body class="goto-here">
-	
+	<%@ include file="fragments/headerCliente.html"%>
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center mb-3 pb-3">
