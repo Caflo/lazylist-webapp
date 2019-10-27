@@ -328,7 +328,7 @@
 		</div>
 	</section>
 
-
+	<%@ include file="fragments/footerCliente.html"%>
 	<hr>
 
 
