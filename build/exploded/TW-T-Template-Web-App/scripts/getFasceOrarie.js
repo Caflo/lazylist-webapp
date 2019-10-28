@@ -1,4 +1,4 @@
-function callback(theXhr, target) {
+function callbackCercaFasce(theXhr, target) {
 	if (theXhr.readyState === 2) {
 		// theElement.innerHTML = "Richiesta inviata...";
 	} else if (theXhr.readyState === 3) {
@@ -6,10 +6,15 @@ function callback(theXhr, target) {
 	} else if (theXhr.readyState === 4) {
 		if (theXhr.status === 200) {
 			if (theXhr.responseText) {
-				var fasce = parsificaJSONArray(theXhr.responseText);
-				for (var i = 0; i < fasce.length; i++) {
-					target.innerHTML += "<option value=\""+fasce[i]+"\">"+fasce[i]+"</option>"
+				var something = JSON.parse(theXhr.responseText);
+				for (var i = 0; i < something.length; i++) {
+					var opt = something[i];
+				    var el = document.createElement("option");
+				    el.textContent = something[i].oraInizio + "-" + something[i].oraFine;
+				    el.value = something[i].oraInizio + "-" + something[i].oraFine;
+				    target.appendChild(el);
 				}
+				calcolaNuovoCosto(); //per la prima fascia oraria trovata, viene calcolato il costo
 			} else {
 				// non faccio niente
 			}
@@ -19,10 +24,10 @@ function callback(theXhr, target) {
 	}
 }
 
-function eseguiAJAXPost(uri, body, target, xhr) {
+function eseguiCercaFasceAJAXPost(uri, body, target, xhr) {
 
 	xhr.onreadystatechange = function() {
-		callback(xhr, target);
+		callbackCercaFasce(xhr, target);
 	};
 
 	// impostazione richiesta asincrona in POST del file specificato
@@ -43,26 +48,11 @@ function eseguiAJAXPost(uri, body, target, xhr) {
 
 function cercaFasceDisponibili(data, target) {
 	
-	var uri = "./ordineController?tipoOperazione=cercaFasce&data="+data;
+	var uri = "./ordineController";
+	body="tipoOperazione=cercaFasce&data="+data;
 	var xhr = myGetXmlHttpRequest();
 	if (xhr)
-		eseguiAJAXPost(uri, target, xhr);
-}
-
-function parsificaJSON(jsonText) {
-	var something = JSON.parse(jsonText);
-	var risultato = "<b>" + something.message + "</b>";
-	return risultato;
-}
-
-function parsificaJSONArray(jsonText) {
-	var something = JSON.parse(jsonText);
-	var risultato = "";
-	for (var i = 0; i < something.length; i++) {
-		if (something[i] != null)
-			risultato += "<li>" + something[i].message + "</li>";
-	}
-	return risultato;
+		eseguiCercaFasceAJAXPost(uri, body, target, xhr);
 }
 
 function leggiContenutoNode(item, nomeNodo) {
