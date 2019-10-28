@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- import di classi Java -->
+<%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.DecimalFormat"%>
 
+<!-- pagina per la gestione di errori -->
+<%@ page errorPage="../errors/failure.jsp"%>
+
+<!-- accesso alla sessione -->
+<%@ page session="true"%>
+
+<!-- PAGINA HTML -->
 <head>
 	<title>Gestione Prodotti</title>
 	<meta charset="utf-8">
@@ -29,6 +40,15 @@
 	<link rel="stylesheet" href="css/flaticon.css">
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css">
+	
+	<script>
+	function check() {
+	    if(document.getElementById("disponibilita").value == 1){
+	    	document.getElementById("disponibilita").
+	    }
+	}
+	</script>
+	
 </head>
 
 <body class="goto-here">
@@ -54,63 +74,36 @@
 								</tr>
 							</thead>
 							<tbody>
+							<%
+							Magazzino m = (Magazzino)session.getAttribute("magazzino");
+							DecimalFormat decF = new DecimalFormat("0.00");
+							for(Prodotto p : m.getProdotti()){
+							%>
 								<tr class="text-center">
                                     <td class="price" style="width: 20%;">
-                                        <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Banana"/></p>
-                                        <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Frutta"/></p>
-                                        <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Chiquita"/></p>
+                                        <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getNome()%>"/></p>
+                                        <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getCategoria() %>"/></p>
+                                        <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getMarca() %>"/></p>
                                     </td>
                                     <td class="price" style="width: 15%;">
                                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown04">
-                                            <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="Italia"/></p>
-                                            <p style="text-align: left;">Peso:&emsp;<input type="text" style="border-radius: 10px;" value="500gr"/></p>
+                                            <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="<%= p.getProvenienza() %>"/></p>
                                         </div>
                                     </td>
-                                    <td class="price" style="width: 12%;">€&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="3.50"/></td>                                    
-                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="20"/>&nbsp;%</td> 
-                                    <td class="price"><input type="checkbox" checked/></td>
-                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="15"/></td> 
-									<td><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
+                                    <td class="price" style="width: 12%;">€&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="<%= decF.format(p.getPrezzo()) %>"/></td>                                    
+                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getSconto() %>"/>&nbsp;%</td> 
+                                    <%if(p.getDisponibile() == true) {%>
+                                    <td class="price"><input id="disponibilita" type="checkbox" checked/></td>
+                                    <% }else{%>
+                                    <td class="price"><input id="disponibilita" type="checkbox"/></td>
+                                    <%} %>
+                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getUnitaDisponibili()) %>"/></td> 
+									<td><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
 								</tr><!-- END TR-->
-                                <tr class="text-center">
-                                        <td class="price" style="width: 20%;">
-                                            <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Prosciutto Crudo di Parma"/></p>
-                                            <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Salumi"/></p>
-                                            <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Citterio"/></p>
-                                        </td>
-                                        <td class="price" style="width: 15%;">
-                                            <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdown04">
-                                                <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="Italia"/></p>
-                                                <p style="text-align: left;">Peso:&emsp;<input type="text" style="border-radius: 10px;" value="200gr"/></p>
-                                            </div>
-                                        </td>
-                                        <td class="price" style="width: 12%;">€&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="3.50"/></td>                                    
-                                        <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value=""/>&nbsp;%</td> 
-                                        <td class="price"><input type="checkbox" checked/></td>
-                                        <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right;" value="20"/></td> 
-                                        <td><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
-                                    </tr><!-- END TR-->
-                                    <tr class="text-center">
-                                            <td class="price" style="width: 20%;">
-                                                <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Mozzarella di bufala"/></p>
-                                                <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Laticini"/></p>
-                                                <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="Vallelata"/></p>
-                                            </td>
-                                            <td class="price" style="width: 15%;">
-                                                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a>
-                                                <div class="dropdown-menu" aria-labelledby="dropdown04">
-                                                    <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="Italia"/></p>
-                                                    <p style="text-align: left;">Peso:&emsp;<input type="text" style="border-radius: 10px;" value="300gr"/></p>
-                                                </div>
-                                            </td>
-                                            <td class="price" style="width: 12%;">€&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="4.50"/></td>                                    
-                                            <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value=""/>&nbsp;%</td> 
-                                            <td class="price"><input type="checkbox" checked/></td>
-                                            <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="10"/></td> 
-                                            <td><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
-                                        </tr><!-- END TR-->
+							<%
+							}
+							%>
 							</tbody>
 						</table>
 						<div>

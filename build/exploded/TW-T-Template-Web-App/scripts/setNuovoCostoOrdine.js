@@ -1,3 +1,4 @@
+
 function callbackCalcolaNuovoCosto(theXhr, costoSpedizione, costoTotale) {
 	if (theXhr.readyState === 2) {
 		// theElement.innerHTML = "Richiesta inviata...";
@@ -7,10 +8,12 @@ function callbackCalcolaNuovoCosto(theXhr, costoSpedizione, costoTotale) {
 		if (theXhr.status === 200) {
 			if (theXhr.responseText) {
 				var result = JSON.parse(theXhr.responseText); //costospedizione
-				costoSpedizione.textContent = parseFloat(result).toFixed(2);
+				costoSpedizione.textContent = parseFloat(Math.round(result * 100) / 100).toFixed(2);
 				//adesso mi ricalcolo il totale (ho bisogno del campo del subtotale)
 				var subtotale = myGetElementById('subtotale').textContent;
-				costoTotale.textContent = (parseFloat(result) + parseFloat(subtotale)).toFixed(2);
+				subtotale = subtotale.replace(",", "."); //da 3,60 passa a 3.60 cosi' riesco a leggerlo
+				var tot = parseFloat(result) + parseFloat(subtotale);
+				costoTotale.textContent = parseFloat(Math.round(tot * 100) / 100).toFixed(2);;
 			} else {
 				// non faccio niente
 			}
@@ -48,10 +51,12 @@ function calcolaNuovoCosto() { //callback dell'evento
 	var fasciaSelezionata = fasce.options[fasce.selectedIndex].text;
 	var costoSpedizione = myGetElementById('costoSpedizione');
 	var costoTotale = myGetElementById('costoTotale');
-	var subtotale = parseFloat(myGetElementById('subtotale').textContent);
+	var subtotale = myGetElementById('subtotale').textContent;
+	subtotale = subtotale.replace(",", ".");
+	
 	
 	var uri = "./ordineController";
-	var body="tipoOperazione=calcolaCosto&fascia="+fasciaSelezionata+"&subtotale="+subtotale;
+	var body="tipoOperazione=calcolaCosto&fascia="+fasciaSelezionata+"&subtotale="+parseFloat(subtotale);
 	var xhr = myGetXmlHttpRequest();
 	if (xhr)
 		eseguiCalcolaNuovoCostoAJAXPost(uri, body, costoSpedizione, costoTotale, xhr);

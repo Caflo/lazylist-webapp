@@ -38,14 +38,16 @@
     <div class="container">
       <div class="row d-flex mb-5 contact-info">
         <div class="infoAccount">
-            <div style="margin-top: 5%;">
-                <p>Nome del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" value="NomeUtente"/></p>
-                <p>Cognome del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" value="CognomeUtente"/></p>
-                <p>Username del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" value="Username"/></p>
-                <p>Password del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="password" value="CognomeUtente"/></p>
-                <p>Mail del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" value="EmailUtente@domain.com"></input></p>
-                <input type="button"style="border-radius: 10px; background-color: #82ae46; width: 24%; height: 10%; margin-left: 38%; margin-top: 5%; color: white;" value="Aggiungi Corriere"/>
-            </div>
+	        <form action="servletAggiuntaCorrieri" method="POST">
+	            <div style="margin-top: 5%;">
+	                <p>Nome del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" name="nomeCorriere" value="NomeUtente"/></p>
+	                <p>Cognome del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" name="cognomeCorriere" value="CognomeUtente"/></p>
+	                <p>Username del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" name="usernameCorriere" value="Username"/></p>
+	                <p>Password del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="password" name="passwordCorriere" value="CognomeUtente"/></p>
+	                <p>Mail del corriere:&emsp;<input style="border-radius: 10px; width: 50%;" type="text" name="mailCorriere" value="EmailUtente@domain.com"></input></p>
+	                <input type="submit"style="border-radius: 10px; background-color: #82ae46; width: 24%; height: 10%; margin-left: 38%; margin-top: 5%; color: white;" value="Aggiungi Corriere"/>
+	            </div>
+	        </form>
         </div>
 
         <div class="logoLazy">

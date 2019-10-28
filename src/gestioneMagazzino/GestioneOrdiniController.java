@@ -164,7 +164,8 @@ public class GestioneOrdiniController extends HttpServlet {
 				+ "    EUR: " + decF.format(l.getPrezzoUnitarioScontato()));
 			testo.append("\n");
 		}
-		testo.append("Totale ordine: EUR " + decF.format(ordine.getCostoTotale()));
+		testo.append("Costo spedizione: EUR " + decF.format(ordine.getFasciaOraria().getCostoConsegna()));
+		testo.append("\nTotale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 		emailController.setEMAIL_TEXT(testo.toString());
 		emailController.mandaEmail();
 		

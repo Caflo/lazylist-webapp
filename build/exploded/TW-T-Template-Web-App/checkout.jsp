@@ -149,14 +149,14 @@
 								<div class="cart-detail cart-total p-3 p-md-4">
 									<h3 class="billing-heading mb-4">Totale ordine</h3>
 									<p class="d-flex">
-										<span>Subtotale carrello</span> &euro;<span id="subtotale">7.55</span>
+										<span>Subtotale carrello</span> &euro;<span id="subtotale"><%= decF.format(c.getSubTotale()) %></span>
 									</p>
 									<p class="d-flex">
 										<span>Spedizione</span> &euro;<span id="costoSpedizione"></span>
 									</p>
 									<hr>
 									<p class="d-flex total-price">
-										<span>Totale</span> &euro;<span name="totale" id="costoTotale">7.55</span>
+										<span>Totale</span> &euro;<span name="totale" id="costoTotale"><%= decF.format(c.getSubTotale()) %></span>
 									</p>
 								</div>
 							</div>
