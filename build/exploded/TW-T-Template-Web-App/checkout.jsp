@@ -3,6 +3,7 @@
 <!-- import di classi Java -->
 <%@ page import="model.ordine.*"%>
 <%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="model.ordine.statiOrdine.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.DecimalFormat"%>
 
@@ -67,6 +68,21 @@
 					<div class="col-xl-7 ftco-animate">
 						<h3 class="mb-4 billing-heading">Dettaglio Ordine</h3>
 						<div class="row align-items-end">
+						
+						<div class="col-md-6">
+								<div class="form-group">
+									<label for="firstname">Nome</label> <input type="text"
+										name="nome" class="form-control" placeholder="">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="firstname">Cognome</label> <input type="text"
+										name="cognome" class="form-control" placeholder="">
+								</div>
+							</div>
+							
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">Email</label> <input type="text"

@@ -4,7 +4,7 @@ public class LineaOrdine {
 
 	private String idProdotto; //idPrdootto
 	private String nomeProdotto;
-	private Double prezzoUnitario;
+	private Double prezzoUnitarioScontato;
 	private Integer quantitaScelta;
 	
 	
@@ -20,11 +20,11 @@ public class LineaOrdine {
 	public void setNomeProdotto(String nomeProdotto) {
 		this.nomeProdotto = nomeProdotto;
 	}
-	public Double getPrezzoUnitario() {
-		return prezzoUnitario;
+	public Double getPrezzoUnitarioScontato() {
+		return prezzoUnitarioScontato;
 	}
-	public void setPrezzoUnitario(Double prezzoUnitario) {
-		this.prezzoUnitario = prezzoUnitario;
+	public void setPrezzoUnitarioScontato(Double prezzoUnitarioScontato) {
+		this.prezzoUnitarioScontato = prezzoUnitarioScontato;
 	}
 	public Integer getQuantitaScelta() {
 		return quantitaScelta;

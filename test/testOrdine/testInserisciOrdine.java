@@ -65,12 +65,12 @@ public class testInserisciOrdine {
 		LineaOrdine l1 = new LineaOrdine();
 		l1.setIdProdotto("5db576278949af9ff39abbf2");
 		l1.setNomeProdotto("Rigatoni");
-		l1.setPrezzoUnitario(2.50);
+		l1.setPrezzoUnitarioScontato(2.50);
 		l1.setQuantitaScelta(2);
 		LineaOrdine l2 = new LineaOrdine();
 		l2.setIdProdotto("5db576278949af9questoefalso");
 		l2.setNomeProdotto("Mozzarella Santa Lucia");
-		l2.setPrezzoUnitario(3.00);
+		l2.setPrezzoUnitarioScontato(3.00);
 		l2.setQuantitaScelta(1);
 		lineeOrdine.add(l1);
 		lineeOrdine.add(l2);
@@ -88,7 +88,7 @@ public class testInserisciOrdine {
 		o.setLineeOrdine(lineeOrdine);
 		o.setTipoPagamento(tipoPagamento);
 		o.setStatoOrdine(new InPreparazione(o));
-		o.setCostoTotale(lineeOrdine.stream().mapToDouble(x -> x.getPrezzoUnitario() * x.getQuantitaScelta()).sum() + f.getCostoConsegna());
+		o.setCostoTotale(lineeOrdine.stream().mapToDouble(x -> x.getPrezzoUnitarioScontato() * x.getQuantitaScelta()).sum() + f.getCostoConsegna());
 
 				
 		try {
@@ -117,7 +117,7 @@ public class testInserisciOrdine {
 	        for (LineaOrdine linea : o.getLineeOrdine()) {
 	        	linee.add(new BasicDBObject("idProdotto", linea.getIdProdotto())
 	        			.append("nomeProdotto", linea.getNomeProdotto())
-	        			.append("prezzoUnitario", linea.getPrezzoUnitario())
+	        			.append("prezzoUnitarioScontato", linea.getPrezzoUnitarioScontato())
 	        			.append("quantitaScelta", linea.getQuantitaScelta()));
 	        }
 	        document.put("lineeOrdine", linee);

@@ -2,12 +2,14 @@ package model.ordine.statiOrdine;
 
 import model.ordine.Ordine;
 import model.ordine.StatoOrdine;
+import model.prodottoECarrello.Carrello;
 
 public class Attuale extends StatoOrdine {
 
+	private Carrello carrello;
+	
 	public Attuale(Ordine ordine) {
 		super(ordine);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -22,5 +24,4 @@ public class Attuale extends StatoOrdine {
 		ordine.setStatoOrdine(new InAttesaConferma(ordine));
 		return;
 	}
-
 }

@@ -29,8 +29,14 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
+import model.ordine.Contanti;
 import model.ordine.FasciaOraria;
+import model.ordine.LineaOrdine;
 import model.ordine.Ordine;
+import model.ordine.POS;
+import model.ordine.StatoOrdine;
+import model.ordine.TipoPagamento;
+import model.ordine.statiOrdine.Attuale;
 import model.prodottoECarrello.Carrello;
 import model.prodottoECarrello.RigaCarrello;
 
@@ -50,11 +56,12 @@ public class OrdineController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		HttpSession session = req.getSession();
 		String tipoOperazione = req.getParameter("tipoOperazione");
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
 		//Switch
-		if (tipoOperazione.equals("cercaFasce")) {
+		if (tipoOperazione.equals("cercaFasce")) { //AJAX
 			Date data;
 			try {
 				data = df.parse(req.getParameter("data"));
@@ -69,16 +76,19 @@ public class OrdineController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		else if (tipoOperazione.equals("calcolaCosto")) {
+		else if (tipoOperazione.equals("calcolaCosto")) { //AJAX
 			String oraInizio = req.getParameter("fascia").split("-")[0];
 			String oraFine = req.getParameter("fascia").split("-")[1];
 			Double costoConsegna = this.getCostoConsegnaByFascia(oraInizio, oraFine);
+			session.setAttribute("costoConsegna", costoConsegna);
 			Gson gson = new Gson();
 			String output = gson.toJson(costoConsegna); //lo mando in json
 			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
 		}
-		else if (tipoOperazione.equals("richiestaOrdine")) { //click su effettua ordine
+		else if (tipoOperazione.equals("richiestaOrdine")) { //FORM click su effettua ordine
 			String email = req.getParameter("email");
+			String nome = req.getParameter("nome");
+			String cognome = req.getParameter("cognome");
 			String indirizzo = req.getParameter("indirizzo");
 			String CAP = req.getParameter("CAP");
 			Date d = null;
@@ -94,8 +104,42 @@ public class OrdineController extends HttpServlet {
 			Ordine o = new Ordine();
 			o.setIdCliente(1);
 			o.setEmailCliente(email);
-			o.setCognomeCliente(cognomeCliente);
+			o.setNomeCliente(nome);
+			o.setCognomeCliente(cognome);
+			o.setIndirizzoConsegna(indirizzo);
+			o.setCAP(CAP);
+			FasciaOraria f = new FasciaOraria();
+			f.setOraInizio(fasciaOraria.split("-")[0]);
+			f.setOraInizio(fasciaOraria.split("-")[1]);
+			//Mi riprendo il costo della consegna ricavato tramite ajax e messo in sessione
+			f.setCostoConsegna((Double) session.getAttribute("costoConsegna")); 
+			o.setFasciaOraria(f);
+			o.setDataConsegna(d);
+			TipoPagamento t = null;
+			if (tipoPagamento.equals("Contanti")) {
+				t = new Contanti();
+			}
+			else
+				t = new POS();
+			o.setTipoPagamento(t);
+			//inizio con questo stato
+			StatoOrdine stato = new Attuale(o);
+			for (RigaCarrello riga : c.getRighe()) {
+				LineaOrdine l = new LineaOrdine();
+				l.setIdProdotto(riga.getIdProdotto());
+				l.setNomeProdotto(riga.getNomeProdotto());
+				//prende gia' quello scontato, al contrario della RigaCarrello
+				l.setPrezzoUnitarioScontato(riga.getPrezzoUnitario() * (1- riga.getSconto()));
+				l.setQuantitaScelta(riga.getQuantitaScelta());
+				o.getLineeOrdine().add(l);
+			}
+			o.setStatoOrdine(new Attuale(o));
+			o.setCostoTotale(totale);
+			session.setAttribute("ordineAttuale", o);
+			//l'ordine attuale deve essere preso dal gestore del magazzino che conferma l'ordine
+			resp.sendRedirect(req.getContextPath() + "/storico.jsp");
 		}
+		
 	}
 
 	public Carrello mostraCarrello() {

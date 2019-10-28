@@ -1,4 +1,4 @@
-package testOrdine;
+package serializer;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -67,7 +67,7 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 		FasciaOraria f = new FasciaOraria();
 		JsonObject fasciaObj = jo.get("fasciaOraria").getAsJsonObject();
 		//Qui nell'ordine per la fascia oraria non considero gli altri due campi
-		// (costoConsegna e giorno) perché il giorno lo ricavo dalla data dell'ordine
+		// (costoConsegna e giorno) perche' il giorno lo ricavo dalla data dell'ordine
 		f.setOraInizio(fasciaObj.get("oraInizio").getAsString());
 		f.setOraFine(fasciaObj.get("oraFine").getAsString());
 		result.setFasciaOraria(f);

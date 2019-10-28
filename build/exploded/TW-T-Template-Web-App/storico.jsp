@@ -2,6 +2,7 @@
 <html lang="en">
 <!-- import di classi Java -->
 <%@ page import="model.ordine.*"%>
+<%@ page import="model.ordine.statiOrdine.*"%>
 <%@ page import="model.prodottoECarrello.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.DecimalFormat"%>
@@ -60,22 +61,37 @@
 								</tr>
 							</thead>
 							<tbody>
+							<% 
+							StoricoOrdiniCliente list = (StoricoOrdiniCliente) session.getAttribute("storicoOrdini");
+							DecimalFormat decF = new DecimalFormat("0.00");
+							for(Ordine o : list.getOrdini())
+							{
+							%>
 								<tr class="text-center">
-									<td class="price">3</td>
+									<td class="price"></td>
 
-									<td class="price">In preparazione</td>
-									<td class="price">€14.00</td>
-									<td class="price">Carta di credito</td>
+									<td class="price"><%= o.getStatoOrdine() %></td>
+									<td class="price">&euro;<%= o.getCostoTotale() %></td>
+									<td class="price"><%= o.getTipoPagamento() %></td>
 									<td class="price">
 										<a class="nav-link dropdown-toggle" href="#" id="dropdown04"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra
 											dettaglio</a>
 										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<span class="dropdown-item">Prosciutto Di Parma&emsp;2&emsp;€4.00</span>
-											<span class="dropdown-item">Salsicce&emsp;1&emsp;€6.00</span>
+										<%
+										for(LineaOrdine l : o.getLineeOrdine())
+										{
+										%>
+											<span class="dropdown-item"><%= l.getNomeProdotto() %>&emsp;<%= l.getQuantitaScelta() %>&emsp;&euro;<%= l.getPrezzoUnitario() %></span>
+										<%
+										} 
+										%>
 										</div>
 									</td>
 								</tr><!-- END TR-->
+							<%
+							}
+							%>
 							</tbody>
 						</table>
 					</div>
