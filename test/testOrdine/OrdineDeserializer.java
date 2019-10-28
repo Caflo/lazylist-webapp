@@ -95,12 +95,12 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 			JsonObject lineaObj = lineeObj.get(i).getAsJsonObject();
 			String idProdotto = lineaObj.get("idProdotto").getAsString();
 			String nomeProdotto = lineaObj.get("nomeProdotto").getAsString();
-			Double prezzoUnitario = lineaObj.get("prezzoUnitario").getAsDouble();
+			Double prezzoUnitarioScontato = lineaObj.get("prezzoUnitarioScontato").getAsDouble();
 			Integer quantitaScelta = lineaObj.get("quantitaScelta").getAsInt();
 			LineaOrdine l = new LineaOrdine();
 			l.setIdProdotto(idProdotto);
 			l.setNomeProdotto(nomeProdotto);
-			l.setPrezzoUnitario(prezzoUnitario);
+			l.setPrezzoUnitarioScontato(prezzoUnitarioScontato);
 			l.setQuantitaScelta(quantitaScelta);
 			lineeOrdine.add(l);
 		}
