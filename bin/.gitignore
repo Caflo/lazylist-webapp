@@ -1,9 +1,11 @@
-/notificaEmail/
-/gestioneMagazzino/
 /gestioneCliente/
-<<<<<<< HEAD
+/gestioneCorriere/
+/gestioneMagazzino/
 /model/
+/notificaEmail/
+/serializer/
 /testCarrello/
+/testFasceOrarie/
+/testMail.class
 /testOrdine/
-=======
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
+/testProdotti/

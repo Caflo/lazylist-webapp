@@ -84,5 +84,14 @@
 		<servlet-name>GestioneOrdiniController</servlet-name>
 		<url-pattern>/gestioneOrdiniController</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GestioneProdottiController</servlet-name>
+		<servlet-class>gestioneMagazzino.GestioneProdottiController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GestioneProdottiController</servlet-name>
+		<url-pattern>/gestioneProdottiController</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>
