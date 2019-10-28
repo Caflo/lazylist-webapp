@@ -55,41 +55,43 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
-						<form action="ordineController" class="billing-form">
+						<form action="ordineController" method="post" class="billing-form">
 							<h3 class="mb-4 billing-heading">Dettaglio Ordine</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="firstname">Email</label>
-	                  <input type="text" class="form-control" name="email" placeholder="">
+	                  <input type="text" name="email" class="form-control" placeholder="">
+	                </div>
+				  </div>
+		            
+					<div class="w-100"></div>
+		            <div class="col-md-6">
+	                <div class="form-group">
+	                	<label for="phone">Indirizzo</label>
+	                  <input type="text" name="indirizzo" class="form-control" placeholder="">
 	                </div>
 				  </div>
 				  <div class="w-100"></div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-	                	<label for="streetaddress">Indirizzo di consegna</label>
-	                  <input type="text" class="form-control" name="indirizzo" placeholder="">
-	                </div>
-					</div>
-					<div class="w-100"></div>
+				  
 				  <div class="w-100"></div>
 		            <div class="col-md-6">
-		            	<div class="form-group">
-	                	<label for="towncity">CAP</label>
-	                  <input type="text" class="form-control" name="CAP" placeholder="">
+	                <div class="form-group">
+	                	<label for="phone">CAP</label>
+	                  <input type="text" name="CAP" class="form-control" placeholder="">
 	                </div>
-		            </div>
+				  </div>
+				  <div class="w-100"></div>
+		            
 					<div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-	                	<label for="streetaddress">Inserisci data di consegna</label>
-	                  <input id="data" type="text" class="form-control" name="dataConsegna" placeholder="gg/mm/aaaa">
+	                	<label for="streetaddress">Data di consegna</label>
+	                  <input type="text" id="data" class="form-control" placeholder="gg/mm/aaaa">
+	                  <input type="button" class="btn btn-primary py-3 px-4" value="cerca fasce disponibili" onclick="cercaFasceDisponibili(myGetElementById('data').value, myGetElementById('comboBoxFasce'))">
+	                  
 	                </div>
 					</div>
-					<!-- Il bottone eseguirà una funzione AJAX (qui è necessario purtroppo) -->
-					<input type="button" value="Cerca fasce disponibili" class="btn btn-primary py-3 px-4" onClick="cercaFasceDisponibili(myGetElementById('data').value, myGetElementById('comboBoxFasce'))">
-					</input>
-					
 					
                 <div class="w-100"></div>
 		            <div class="col-md-12">
@@ -98,30 +100,37 @@
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
 		                  <select id="comboBoxFasce" class="form-control" onchange="calcolaNuovoCosto()">
-		                  	<!-- verrà riempita quando si sceglierà la data -->
+		                  	
 		                  </select>
 		                </div>
 		            	</div>
 		            </div>
-                
-	          
+                <div class="w-100"></div>
+                <div class="col-md-12">
+                	<div class="form-group mt-4">
+										
+									</div>
+                </div>
+	            </div>
+	          </form><!-- END -->
+					</div>
 					<div class="col-xl-5">
 	          <div class="row mt-5 pt-3">
 	          	<div class="col-md-12 d-flex mb-5">
 	          		<div class="cart-detail cart-total p-3 p-md-4">
-	          			<h3 class="billing-heading mb-4">Totale Carrello</h3>
+	          			<h3 class="billing-heading mb-4">Totale ordine</h3>
 	          			<p class="d-flex">
-		    						<span>Subtotale</span>
-		    						<span id="subtotale">8.50</span>
+		    						<span>Subtotale carrello</span>
+		    						&euro;<span id="subtotale">7.55</span>
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Spedizione</span>
-		    						<span id="costoSpedizione">2.00</span>
+		    						&euro;<span id="costoSpedizione"></span>
 		    					</p>
 		    					<hr>
 		    					<p class="d-flex total-price">
-		    						<span>Total</span>
-		    						<span id="costoTotale">10.50</span>
+		    						<span>Totale</span>
+		    						&euro;<span id="costoTotale">7.55</span>
 		    					</p>
 								</div>
 	          	</div>
@@ -147,15 +156,13 @@
 	          	</div>
 	          </div>
           </div> <!-- .col-md-8 -->
-          </form><!-- END -->
-		</div>
         </div>
       </div>
     </section> <!-- .section -->
 
-   
+	<%@ include file="fragments/footerCliente.html"%>
 
-  <!-- loader -->
+<!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
