@@ -19,6 +19,7 @@ import com.mongodb.util.JSON;
 
 import model.ordine.Ordine;
 import model.ordine.OrdiniTotali;
+import serializer.OrdineDeserializer;
 
 public class testLetturaOrdine {
 

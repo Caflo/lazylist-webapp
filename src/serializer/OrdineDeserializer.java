@@ -4,8 +4,10 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
@@ -90,7 +92,7 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 			result.setStatoOrdine(new NonConsegnato(result));
 
 		
-		Set<LineaOrdine> lineeOrdine = new HashSet<>();
+		List<LineaOrdine> lineeOrdine = new ArrayList<>();
 		JsonArray lineeObj = jo.get("lineeOrdine").getAsJsonArray();
 		for (int i = 0; i < lineeObj.size(); i++) {
 			JsonObject lineaObj = lineeObj.get(i).getAsJsonObject();
@@ -105,7 +107,7 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 			l.setQuantitaScelta(quantitaScelta);
 			lineeOrdine.add(l);
 		}
-		
+		result.setLineeOrdine(lineeOrdine);
 		Double costoTotale = jo.get("costoTotale").getAsDouble();
 		result.setCostoTotale(costoTotale);
 		return result;

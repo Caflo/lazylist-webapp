@@ -5,7 +5,7 @@
 <%@ page import="model.ordine.statiOrdine.*"%>
 <%@ page import="model.prodottoECarrello.*"%>
 <%@ page import="java.util.*"%>
-<%@ page import="java.text.DecimalFormat"%>
+<%@ page import="java.text.*"%>
 
 <!-- pagina per la gestione di errori -->
 <%@ page errorPage="../errors/failure.jsp"%>
@@ -53,7 +53,8 @@
 						<table class="table">
 							<thead class="thead-primary">
 								<tr class="text-center">
-									<th>ID Ordine</th>
+									<th>Data consegna</th>
+									<th>Orario di consegna</th>
 									<th>Status Ordine</th>
 									<th>Prezzo Totale</th>
 									<th>Metodo Pagamento</th>
@@ -64,15 +65,16 @@
 							<% 
 							StoricoOrdiniCliente list = (StoricoOrdiniCliente) session.getAttribute("storicoOrdini");
 							DecimalFormat decF = new DecimalFormat("0.00");
+							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 							for(Ordine o : list.getOrdini())
 							{
 							%>
 								<tr class="text-center">
-									<td class="price"></td>
-
-									<td class="price"><%= o.getStatoOrdine() %></td>
+									<td class="price"><%= df.format(o.getDataConsegna()) %></td>
+									<td class="price"><%= o.getFasciaOraria().getOraInizio() + "-" + o.getFasciaOraria().getOraFine() %></td>
+									<td class="price"><%= o.getStatoOrdine().getStato() %></td>
 									<td class="price">&euro;<%= decF.format(o.getCostoTotale()) %></td>
-									<td class="price"><%= o.getTipoPagamento() %></td>
+									<td class="price"><%= o.getTipoPagamento().getTipoPagamento() %></td>
 									<td class="price">
 										<a class="nav-link dropdown-toggle" href="#" id="dropdown04"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra dettaglio</a>

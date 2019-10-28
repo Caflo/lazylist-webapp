@@ -1,5 +1,6 @@
 package model.ordine;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class Ordine {
 	private TipoPagamento tipoPagamento;
 	private StatoOrdine statoOrdine;
 	private List<LineaOrdine> lineeOrdine;
+	
+	public Ordine() {
+		this.lineeOrdine = new ArrayList<>();
+	}
 	
 	public ObjectId get_id() {
 		return _id;

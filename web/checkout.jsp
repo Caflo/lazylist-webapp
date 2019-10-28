@@ -166,7 +166,7 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="tipoPagamento"
+												<label><input type="radio" name="tipoPagamento" value="POS"
 													class="mr-2">POS</label>
 											</div>
 										</div>
@@ -174,14 +174,15 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="tipoPagamento"
+												<label><input type="radio" name="tipoPagamento" value="Contanti"
 													class="mr-2">Contanti</label>
 											</div>
 										</div>
 									</div>
 									<p>
-										<a href="#" class="btn btn-primary py-3 px-4">Effettua
-											ordine</a>
+										<button type="submit" name="tipoOperazione" value="richiestaOrdine">
+										<a class="btn btn-primary py-3 px-4">Effettua ordine</a>
+										</button>
 									</p>
 								</div>
 							</div>

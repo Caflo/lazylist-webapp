@@ -24,9 +24,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
 import model.ordine.Ordine;
-import model.ordine.OrdiniTotali;
 import model.ordine.StoricoOrdiniCliente;
-import model.prodottoECarrello.Carrello;
 import serializer.OrdineDeserializer;
 
 public class StoricoOrdiniController extends HttpServlet {
@@ -53,7 +51,6 @@ public class StoricoOrdiniController extends HttpServlet {
 			//Lettura
 		
 			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-
 			
 			JSONArray ja = new JSONArray();
 			BasicDBObject searchQuery = new BasicDBObject();

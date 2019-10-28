@@ -21,6 +21,7 @@ import com.mongodb.util.JSON;
 
 import model.ordine.LineaOrdine;
 import model.ordine.Ordine;
+import serializer.OrdineDeserializer;
 
 public class testAggiornaStatoOrdine {
 	

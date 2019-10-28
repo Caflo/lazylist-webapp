@@ -79,8 +79,11 @@ public class OrdineController extends HttpServlet {
 		else if (tipoOperazione.equals("calcolaCosto")) { //AJAX
 			String oraInizio = req.getParameter("fascia").split("-")[0];
 			String oraFine = req.getParameter("fascia").split("-")[1];
+			Double subtotale = Double.parseDouble(req.getParameter("subtotale"));
 			Double costoConsegna = this.getCostoConsegnaByFascia(oraInizio, oraFine);
+			//Sono strumentopoli che ci serviranno piu' tardi
 			session.setAttribute("costoConsegna", costoConsegna);
+			session.setAttribute("subtotale", subtotale);
 			Gson gson = new Gson();
 			String output = gson.toJson(costoConsegna); //lo mando in json
 			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
@@ -99,7 +102,6 @@ public class OrdineController extends HttpServlet {
 			}
 			String fasciaOraria = req.getParameter("fascia");
 			String tipoPagamento = req.getParameter("tipoPagamento");
-			Double totale = Double.parseDouble(req.getParameter("totale"));
 			Carrello c = this.mostraCarrello();
 			Ordine o = new Ordine();
 			o.setIdCliente(1);
@@ -110,9 +112,11 @@ public class OrdineController extends HttpServlet {
 			o.setCAP(CAP);
 			FasciaOraria f = new FasciaOraria();
 			f.setOraInizio(fasciaOraria.split("-")[0]);
-			f.setOraInizio(fasciaOraria.split("-")[1]);
+			f.setOraFine(fasciaOraria.split("-")[1]);
 			//Mi riprendo il costo della consegna ricavato tramite ajax e messo in sessione
-			f.setCostoConsegna((Double) session.getAttribute("costoConsegna")); 
+			//e anche il subtotale
+			Double costoConsegna = (Double) session.getAttribute("costoConsegna"); 
+			f.setCostoConsegna(costoConsegna);
 			o.setFasciaOraria(f);
 			o.setDataConsegna(d);
 			TipoPagamento t = null;
@@ -134,10 +138,11 @@ public class OrdineController extends HttpServlet {
 				o.getLineeOrdine().add(l);
 			}
 			o.setStatoOrdine(new Attuale(o));
-			o.setCostoTotale(totale);
+			Double subtotale = (Double) session.getAttribute("subtotale");
+			o.setCostoTotale(subtotale + costoConsegna);
 			session.setAttribute("ordineAttuale", o);
 			//l'ordine attuale deve essere preso dal gestore del magazzino che conferma l'ordine
-			resp.sendRedirect(req.getContextPath() + "/storico.jsp");
+			resp.sendRedirect(req.getContextPath() + "/orderSuccess.jsp");
 		}
 		
 	}
