@@ -49,7 +49,7 @@
 	}
 	<script>
 	function addNewLine() {
-		document.getElementById("provaprova").innerHTML += '<tr class="text-center"> <td class="price" style="width: 20%;"> <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="" /></p> <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="" /></p> <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="" /></p> </td> <td class="price" style="width: 15%;"> <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a> <div class="dropdown-menu" aria-labelledby="dropdown04"> <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="" /></p> <p style="text-align: left;">Peso:&emsp;<input type="text" style="border-radius: 10px;" value="" /></p> </div> </td> <td class="price" style="width: 12%;">€&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="" /></td> <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="" />&nbsp;%</td> <td class="price"><input id="disponibilita" type="checkbox"/></td> <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="" /></td> <td><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva" /><input type="button" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina" /></td> </tr><!-- END TR-->'; 
+		document.getElementById("lineeProdotti").innerHTML += <%@ include file="fragments/newLine.html"%>;
 	}
 </script>
 	</script>
@@ -79,40 +79,40 @@
 								</tr>
 							</thead>
 							<form action="gestioneProdottiController" method="POST">
-							<tbody id="lineeProdotti">
-							<%
-							Magazzino m = (Magazzino)session.getAttribute("magazzino");
-							DecimalFormat decF = new DecimalFormat("0.00");
-							for(Prodotto p : m.getProdotti()){
-							%>
-							
-								<tr class="text-center">
-                                    <td class="price" style="width: 20%;">
-                                        <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getNome()%>"/></p>
-                                        <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getCategoria() %>"/></p>
-                                        <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getMarca() %>"/></p>
-                                    </td>
-                                    <td class="price" style="width: 15%;">
-                                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdown04">
-                                            <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="<%= p.getProvenienza() %>"/></p>
-                                        </div>
-                                    </td>
-                                    <td class="price" style="width: 12%;">â¬&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="<%= decF.format(p.getPrezzo()) %>"/></td>                                    
-                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getSconto() %>"/>&nbsp;%</td> 
-                                    <%if(p.getDisponibile() == true) {%>
-                                    <td class="price"><input id="disponibilita" type="checkbox" checked/></td>
-                                    <% }else{%>
-                                    <td class="price"><input id="disponibilita" type="checkbox"/></td>
-                                    <%} %>
-                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getUnitaDisponibili() %>"/></td> 
-									<td><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
-								</tr><!-- END TR-->
-							
-							<%
-							}
-							%>
-							</tbody>
+								<tbody id="lineeProdotti">
+								<%
+								Magazzino m = (Magazzino)session.getAttribute("magazzino");
+								DecimalFormat decF = new DecimalFormat("0.00");
+								for(Prodotto p : m.getProdotti()){
+								%>
+								
+									<tr class="text-center">
+	                                    <td class="price" style="width: 20%;">
+	                                        <p style="text-align: left;">Nome:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getNome()%>"/></p>
+	                                        <p style="text-align: left;">Categoria:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getCategoria() %>"/></p>
+	                                        <p style="text-align: left;">Marca:&emsp;<input type="text" style="border-radius: 10px; width: 50%" value="<%= p.getMarca() %>"/></p>
+	                                    </td>
+	                                    <td class="price" style="width: 15%;">
+	                                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Altri Dettagli</a>
+	                                        <div class="dropdown-menu" aria-labelledby="dropdown04">
+	                                            <p style="text-align: left;">Provenienza:&emsp;<input type="text" style="border-radius: 10px;" value="<%= p.getProvenienza() %>"/></p>
+	                                        </div>
+	                                    </td>
+	                                    <td class="price" style="width: 12%;">â¬&nbsp;<input type="text" style="border-radius: 10px; width: 50%;" value="<%= decF.format(p.getPrezzo()) %>"/></td>                                    
+	                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getSconto() %>"/>&nbsp;%</td> 
+	                                    <%if(p.getDisponibile() == true) {%>
+	                                    <td class="price"><input id="disponibilita" type="checkbox" checked/></td>
+	                                    <% }else{%>
+	                                    <td class="price"><input id="disponibilita" type="checkbox"/></td>
+	                                    <%} %>
+	                                    <td class="price" style="width: 12%;"><input type="text" style="border-radius: 10px; width: 50%; text-align: right" value="<%= p.getUnitaDisponibili() %>"/></td> 
+										<td><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Salva"/><input type="submit" style="border-radius: 10px; background-color: #82ae46; color: white;" value="Elimina"/></td>
+									</tr><!-- END TR-->
+								
+								<%
+								}
+								%>
+								</tbody>
 							</form>
 						</table>
 						<div>
