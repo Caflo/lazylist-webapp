@@ -7,6 +7,15 @@ function callbackCercaFasce(theXhr, target) {
 		if (theXhr.status === 200) {
 			if (theXhr.responseText) {
 				var something = JSON.parse(theXhr.responseText);
+				
+				//Elimino le date trovate precedentemente
+				var child = target.lastElementChild;  
+		        while (child) { 
+		        	target.removeChild(child); 
+		            child = target.lastElementChild; 
+		        }
+		        
+		        //Aggiungo quelle nuove (corrette)
 				for (var i = 0; i < something.length; i++) {
 					var opt = something[i];
 				    var el = document.createElement("option");

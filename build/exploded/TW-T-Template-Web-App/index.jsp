@@ -44,28 +44,21 @@
 
 	<script type="text/javascript">
 		function addToCart(nomeProdotto){
-
 			alert(nomeProdotto);
-
 		}
 		function myGetElementById(idElemento) {
-
 			// elemento da restituire
 			var elemento;
-
 			// se esiste il metodo getElementById questo if sara'ï¿½ 
 			// diverso da false, null o undefined
 			// e sara'ï¿½ quindi considerato valido, come un true
 			if ( document.getElementById )
 				elemento = document.getElementById(idElemento);
-
 			// altrimenti e' necessario usare un vecchio sistema
 			else
 				elemento = document.all[idElemento];
-
 			// restituzione elemento
 			return elemento;
-
 			} // myGetElementById()
 	</script>
 
@@ -81,7 +74,7 @@
 				<div class="col-md-12 heading-section text-center ftco-animate">
 					<span class="subheading">Prodotti Offerti</span>
 					<h2 class="mb-4">Il nostro catalogo</h2>
-					<p>Prodotti tipici di prima qualità  direttamente a casa tua</p>
+					<p>Prodotti tipici di prima qualità  direttamente a casa tua</p>
 				</div>
 			</div>
 		</div>
