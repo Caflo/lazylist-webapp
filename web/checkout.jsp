@@ -58,21 +58,6 @@
 	<%
 		Carrello c = (Carrello) session.getAttribute("carrello"); //quando accedo per la prima volta all'ordine sicuramente ce l'ho
 		DecimalFormat decF = new DecimalFormat("0.00");
-<<<<<<< HEAD
-	 %>
-
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-xl-7 ftco-animate">
-					<form action="ordineController" method="post" class="billing-form">
-						<h3 class="mb-4 billing-heading">Dettaglio Ordine</h3>
-						<div class="row align-items-end">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="firstname">Email</label> <input type="text"
-										name="email" class="form-control" placeholder="">
-=======
 	%>
 
 	<form action="ordineController" method="post" class="billing-form">
@@ -157,91 +142,8 @@
 									<p class="d-flex total-price">
 										<span>Totale</span> &euro;<span name="totale" id="costoTotale">7.55</span>
 									</p>
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 								</div>
 							</div>
-<<<<<<< HEAD
-
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="phone">Indirizzo</label> <input type="text"
-										name="indirizzo" class="form-control" placeholder="">
-								</div>
-							</div>
-							<div class="w-100"></div>
-
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="phone">CAP</label> <input type="text" name="CAP"
-										class="form-control" placeholder="">
-								</div>
-							</div>
-							<div class="w-100"></div>
-
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="streetaddress">Data di consegna</label> <input
-										type="text" id="data" class="form-control"
-										placeholder="gg/mm/aaaa"> <input type="button"
-										class="btn btn-primary py-3 px-4"
-										value="cerca fasce disponibili"
-										onclick="cercaFasceDisponibili(myGetElementById('data').value, myGetElementById('comboBoxFasce'))">
-
-								</div>
-							</div>
-
-							<div class="w-100"></div>
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="country">Fascia Oraria</label>
-									<div class="select-wrap">
-										<div class="icon">
-											<span class="ion-ios-arrow-down"></span>
-										</div>
-										<select id="comboBoxFasce" class="form-control"
-											onchange="calcolaNuovoCosto()">
-
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="w-100"></div>
-							<div class="col-md-12">
-								<div class="form-group mt-4"></div>
-							</div>
-						</div>
-					</form>
-					<!-- END -->
-				</div>
-				<div class="col-xl-5">
-					<div class="row mt-5 pt-3">
-						<div class="col-md-12 d-flex mb-5">
-							<div class="cart-detail cart-total p-3 p-md-4">
-								<h3 class="billing-heading mb-4">Totale ordine</h3>
-								<p class="d-flex">
-									<span>Subtotale carrello</span> &euro;<span id="subtotale">7.55</span>
-								</p>
-								<p class="d-flex">
-									<span>Spedizione</span> &euro;<span id="costoSpedizione"></span>
-								</p>
-								<hr>
-								<p class="d-flex total-price">
-									<span>Totale</span> &euro;<span id="costoTotale">7.55</span>
-								</p>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="cart-detail p-3 p-md-4">
-								<h3 class="billing-heading mb-4">Metodo Di Pagamento</h3>
-								<div class="form-group">
-									<div class="col-md-12">
-										<div class="radio">
-											<label><input type="radio" name="optradio"
-												class="mr-2">POS</label>
-=======
 							<div class="col-md-12">
 								<div class="cart-detail p-3 p-md-4">
 									<h3 class="billing-heading mb-4">Metodo Di Pagamento</h3>
@@ -251,48 +153,21 @@
 												<label><input type="radio" name="tipoPagamento"
 													class="mr-2">POS</label>
 											</div>
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 										</div>
 									</div>
-<<<<<<< HEAD
-								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										<div class="radio">
-											<label><input type="radio" name="optradio"
-												class="mr-2">Contante</label>
-=======
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
 												<label><input type="radio" name="tipoPagamento"
 													class="mr-2">Contanti</label>
 											</div>
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 										</div>
 									</div>
-<<<<<<< HEAD
-=======
 									<p>
 										<a href="#" class="btn btn-primary py-3 px-4">Effettua
 											ordine</a>
 									</p>
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 								</div>
-<<<<<<< HEAD
-								<p>
-									<a href="#" class="btn btn-primary py-3 px-4">Effettua
-										ordine</a>
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- .col-md-8 -->
-			</div>
-		</div>
-	</section>
-=======
 							</div>
 						</div>
 					</div>
@@ -301,7 +176,6 @@
 			</div>
 		</section>
 	</form>
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 	<!-- .section -->
 
 	<%@ include file="fragments/footerCliente.html"%>
@@ -335,11 +209,7 @@
 	<script src="js/main.js"></script>
 
 	<script>
-<<<<<<< HEAD
-		$(document).ready(function(){
-=======
 		$(document).ready(function() {
->>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 
 			var quantitiy = 0;
 			$('.quantity-right-plus').click(function(e) {
