@@ -51,10 +51,12 @@ function calcolaNuovoCosto() { //callback dell'evento
 	var fasciaSelezionata = fasce.options[fasce.selectedIndex].text;
 	var costoSpedizione = myGetElementById('costoSpedizione');
 	var costoTotale = myGetElementById('costoTotale');
-	var subtotale = parseFloat(myGetElementById('subtotale').textContent);
+	var subtotale = myGetElementById('subtotale').textContent;
+	subtotale = subtotale.replace(",", ".");
+	
 	
 	var uri = "./ordineController";
-	var body="tipoOperazione=calcolaCosto&fascia="+fasciaSelezionata+"&subtotale="+subtotale;
+	var body="tipoOperazione=calcolaCosto&fascia="+fasciaSelezionata+"&subtotale="+parseFloat(subtotale);
 	var xhr = myGetXmlHttpRequest();
 	if (xhr)
 		eseguiCalcolaNuovoCostoAJAXPost(uri, body, costoSpedizione, costoTotale, xhr);

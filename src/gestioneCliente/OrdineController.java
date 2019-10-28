@@ -76,6 +76,7 @@ public class OrdineController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
 		else if (tipoOperazione.equals("calcolaCosto")) { //AJAX
 			String oraInizio = req.getParameter("fascia").split("-")[0];
 			String oraFine = req.getParameter("fascia").split("-")[1];
