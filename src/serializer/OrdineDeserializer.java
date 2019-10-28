@@ -42,6 +42,7 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 		
 		JsonObject jo = json.getAsJsonObject();
 		
+		//
 		String idOrdine = jo.get("_id").getAsJsonObject().get("$oid").getAsString();
 		ObjectId _id = new ObjectId(idOrdine);
 		result.set_id(_id);
