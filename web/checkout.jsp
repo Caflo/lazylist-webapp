@@ -23,6 +23,9 @@
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
+	<script src="scripts/getFasceOrarie.js" type="text/javascript"></script> <!-- AJAX -->
+	<script src="scripts/setNuovoCostoOrdine.js" type="text/javascript"></script> <!-- AJAX -->
+    <script src="scripts/utils.js" type="text/javascript"></script>
     
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
@@ -52,7 +55,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
-						<form action="/ordineController" class="billing-form">
+						<form action="ordineController" class="billing-form">
 							<h3 class="mb-4 billing-heading">Dettaglio Ordine</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
@@ -83,10 +86,10 @@
 	                  <input id="data" type="text" class="form-control" name="dataConsegna" placeholder="gg/mm/aaaa">
 	                </div>
 					</div>
-					<br> <!-- Il bottone eseguirà una funzione AJAX (qui è necessario purtroppo) -->
-					<button class="btn btn-primary py-3 px-4" onClick="cercaFasceDisponibili(myGetElementById('data'), myGetElementById('comboBoxFasce'))">Cerca date disponibili
-					</button>
-					<br>
+					<!-- Il bottone eseguirà una funzione AJAX (qui è necessario purtroppo) -->
+					<input type="button" value="Cerca fasce disponibili" class="btn btn-primary py-3 px-4" onClick="cercaFasceDisponibili(myGetElementById('data').value, myGetElementById('comboBoxFasce'))">
+					</input>
+					
 					
                 <div class="w-100"></div>
 		            <div class="col-md-12">
@@ -94,19 +97,13 @@
 		            		<label for="country">Fascia Oraria</label>
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="comboBoxFasce" class="form-control">
+		                  <select id="comboBoxFasce" class="form-control" onchange="calcolaNuovoCosto()">
 		                  	<!-- verrà riempita quando si sceglierà la data -->
 		                  </select>
 		                </div>
 		            	</div>
 		            </div>
-                <div class="w-100"></div>
-                <div class="col-md-12">
-                	<div class="form-group mt-4">
-										
-					</div>
-                </div>
-	            </div>
+                
 	          
 					<div class="col-xl-5">
 	          <div class="row mt-5 pt-3">
@@ -114,17 +111,17 @@
 	          		<div class="cart-detail cart-total p-3 p-md-4">
 	          			<h3 class="billing-heading mb-4">Totale Carrello</h3>
 	          			<p class="d-flex">
-		    						<span>Totale</span>
-		    						<span>â‚¬7.55</span>
+		    						<span>Subtotale</span>
+		    						<span id="subtotale">8.50</span>
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Spedizione</span>
-		    						<span id="costoSpedizione">â‚¬3.50</span>
+		    						<span id="costoSpedizione">2.00</span>
 		    					</p>
 		    					<hr>
 		    					<p class="d-flex total-price">
 		    						<span>Total</span>
-		    						<span id="totale">â‚¬11.05</span>
+		    						<span id="costoTotale">10.50</span>
 		    					</p>
 								</div>
 	          	</div>

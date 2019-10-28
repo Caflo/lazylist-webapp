@@ -32,9 +32,9 @@ public class testInserisciFasciaOraria {
 		//Fascia oraria di prova
 		FasciaOraria f = new FasciaOraria();
 		f.setGiorno(DayOfWeek.FRIDAY.getDisplayName(TextStyle.FULL, Locale.ITALY));
-		f.setOraInizio("16:30");
-		f.setOraFine("17:30");
-		f.setCostoConsegna(2.50);
+		f.setOraInizio("18:00");
+		f.setOraFine("19:00");
+		f.setCostoConsegna(6.00);
 		
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);

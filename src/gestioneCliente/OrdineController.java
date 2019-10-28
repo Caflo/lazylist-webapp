@@ -66,6 +66,37 @@ public class OrdineController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		else if (tipoOperazione.equals("calcolaCosto")) {
+			String oraInizio = req.getParameter("fascia").split("-")[0];
+			String oraFine = req.getParameter("fascia").split("-")[1];
+			Double costoConsegna = this.getCostoConsegnaByFascia(oraInizio, oraFine);
+			Gson gson = new Gson();
+			String output = gson.toJson(costoConsegna); //lo mando in json
+			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
+		}
+	}
+
+	private Double getCostoConsegnaByFascia(String oraInizio, String oraFine) {
+
+		FasciaOraria f = null;
+		
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+			DBCollection collection = database.getCollection("fasceOrarie");
+
+			//Lettura
+			Gson gson = new Gson();
+			JSONArray ja = new JSONArray();
+			BasicDBObject searchQuery = new BasicDBObject();
+			searchQuery.put("oraInizio", oraInizio);
+			searchQuery.put("oraFine", oraFine);
+	        DBObject cursor = collection.findOne(searchQuery);
+	        f = gson.fromJson(cursor.toString(), FasciaOraria.class);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return f.getCostoConsegna();
 	}
 
 	private Set<FasciaOraria> calcolaFasceDisponibiliPerData(Date data) {
