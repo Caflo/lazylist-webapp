@@ -77,11 +77,7 @@ public class CarrelloController extends HttpServlet {
 			this.modificaQuantita(nomeProdotto, nuovaQuantita);
 			// Passo di nuovo alla doGet che reimpostera' il carrello
 			resp.sendRedirect(req.getContextPath() + "/carrelloController");
-		}
-		
-//		String nomeProdotto = req.getParameter("nomeProdotto");
-//		this.aggiungiAlCarrello(nomeProdotto);
-//		
+		}	
 		
 	}
 	
