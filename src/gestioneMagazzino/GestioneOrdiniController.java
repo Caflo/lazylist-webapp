@@ -53,15 +53,13 @@ public class GestioneOrdiniController extends HttpServlet {
 		Ordine ordine = (Ordine) session.getAttribute("ordineAttuale");
 		if (ordine != null) { //lo inserisco e reindirizzo a pagina di successo
 			//Aggiorno stato da Attuale a InAttesaConferma
+			ordine.aggiornaStato();
 			
 			//Inserisco
 			this.inserisciOrdine(ordine);
 			
 			//Mando email
-			ordine.aggiornaStato();
-			EmailController emailController = new EmailController(ordine.getEmailCliente(), "Attesa conferma");
-			emailController.setEMAIL_TEXT("Ciao! L'ordine e' stato evaso. Ti faremo sapere quando sara' stato accettato.");
-			emailController.mandaEmail();
+			this.buildEmailAndSend(ordine);
 			
 			//Rimuovo attributo senno' ogni volta che vengo chiamato inserisco un ordine
 			session.removeAttribute("ordine");
@@ -78,7 +76,6 @@ public class GestioneOrdiniController extends HttpServlet {
 	}
 
 	
-
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -161,7 +158,23 @@ public class GestioneOrdiniController extends HttpServlet {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
+	
 	}
 	
+	private void buildEmailAndSend(Ordine ordine) {
+		EmailController emailController = new EmailController(ordine.getEmailCliente(), "Attesa conferma");
+		StringBuilder testo = new StringBuilder();
+		testo.append("Ciao! L'ordine e' stato evaso. Ti faremo sapere quando sara' stato accettato.\n");
+		testo.append("Intanto ti allego il riepilogo dell'ordine:\n");
+		for (LineaOrdine l : ordine.getLineeOrdine()) {
+			testo.append("Prodotto: " + l.getNomeProdotto() 
+				+ " x " + l.getQuantitaScelta() 
+				+ " Prezzo: " + l.getPrezzoUnitarioScontato());
+			testo.append("\n");
+		}
+		testo.append("Totale ordine: &euro;" + ordine.getCostoTotale());
+		emailController.setEMAIL_TEXT(testo.toString());
+		emailController.mandaEmail();
+		
+	}
 }
