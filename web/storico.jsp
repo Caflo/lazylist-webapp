@@ -71,18 +71,17 @@
 									<td class="price"></td>
 
 									<td class="price"><%= o.getStatoOrdine() %></td>
-									<td class="price">&euro;<%= o.getCostoTotale() %></td>
+									<td class="price">&euro;<%= decF.format(o.getCostoTotale()) %></td>
 									<td class="price"><%= o.getTipoPagamento() %></td>
 									<td class="price">
 										<a class="nav-link dropdown-toggle" href="#" id="dropdown04"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra dettaglio</a>
 										<div class="dropdown-menu" aria-labelledby="dropdown04">
 										<%
 										for(LineaOrdine l : o.getLineeOrdine())
 										{
 										%>
-											<span class="dropdown-item"><%= l.getNomeProdotto() %>&emsp;<%= l.getQuantitaScelta() %>&emsp;&euro;<%= l.getPrezzoUnitario() %></span>
+											<span class="dropdown-item"><%= l.getNomeProdotto() %>&emsp;<%= l.getQuantitaScelta() %>&emsp;&euro;<%= decF.format(l.getPrezzoUnitarioScontato()) %></span>
 										<%
 										} 
 										%>
