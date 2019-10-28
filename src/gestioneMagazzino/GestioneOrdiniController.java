@@ -3,23 +3,15 @@ package gestioneMagazzino;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jabsorb.client.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +26,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
-import com.sun.mail.smtp.SMTPTransport;
 
 import model.ordine.LineaOrdine;
 import model.ordine.Ordine;
@@ -162,17 +153,18 @@ public class GestioneOrdiniController extends HttpServlet {
 	}
 	
 	private void buildEmailAndSend(Ordine ordine) {
+		DecimalFormat decF = new DecimalFormat("0.00");
 		EmailController emailController = new EmailController(ordine.getEmailCliente(), "Attesa conferma");
 		StringBuilder testo = new StringBuilder();
-		testo.append("Ciao! L'ordine e' stato evaso. Ti faremo sapere quando sara' stato accettato.\n");
-		testo.append("Intanto ti allego il riepilogo dell'ordine:\n");
+		testo.append("Ciao! Grazie per aver ordinato su Lazylist! L'ordine e' stato evaso. Ti faremo sapere quando sara' stato accettato.\n");
+		testo.append("\nRiepilogo dell'ordine:\n");
 		for (LineaOrdine l : ordine.getLineeOrdine()) {
 			testo.append("Prodotto: " + l.getNomeProdotto() 
 				+ " x " + l.getQuantitaScelta() 
-				+ " Prezzo: " + l.getPrezzoUnitarioScontato());
+				+ "    EUR: " + decF.format(l.getPrezzoUnitarioScontato()));
 			testo.append("\n");
 		}
-		testo.append("Totale ordine: &euro;" + ordine.getCostoTotale());
+		testo.append("Totale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 		emailController.setEMAIL_TEXT(testo.toString());
 		emailController.mandaEmail();
 		
