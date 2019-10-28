@@ -9,6 +9,7 @@ public class Ordine {
 
 	private ObjectId _id;
 	private Integer idCliente;
+	private String emailCliente;
 	private String nomeCliente;
 	private String cognomeCliente;
 	private Date dataConsegna;
@@ -31,6 +32,12 @@ public class Ordine {
 	}
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
+	}
+	public String getEmailCliente() {
+		return emailCliente;
+	}
+	public void setEmailCliente(String emailCliente) {
+		this.emailCliente = emailCliente;
 	}
 	public String getNomeCliente() {
 		return nomeCliente;

@@ -47,7 +47,7 @@ import model.prodottoECarrello.RigaCarrello;
 public class testInserisciOrdine {
 	
 	@Test
-	public void testInserisciOrdine() throws ParseException {
+	public void test() throws ParseException {
 		
 		DateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
 		DateFormat formatOrario = new SimpleDateFormat("HH:mm"); //uso sempre quello di Date perché Gson ha problemi con la serializzazione di java.time
@@ -78,6 +78,7 @@ public class testInserisciOrdine {
 		//Creo l'ordine di prova
 		Ordine o = new Ordine();
 		o.setIdCliente(1);
+		o.setEmailCliente("mariorossi@email.com");
 		o.setNomeCliente("Mario");
 		o.setCognomeCliente("Rossi");
 		o.setDataConsegna(formatData.parse("22/09/2019"));
@@ -98,6 +99,7 @@ public class testInserisciOrdine {
 			DBCollection collection = database.getCollection("ordini");
 	        BasicDBObject document = new BasicDBObject();
 	        document.put("idCliente", o.getIdCliente());
+	        document.put("emailCliente", o.getEmailCliente());
 	        document.put("nomeCliente", o.getNomeCliente());
 	        document.put("cognomeCliente", o.getCognomeCliente());
 	        document.put("dataConsegna", formatData.format(o.getDataConsegna()));
@@ -127,6 +129,5 @@ public class testInserisciOrdine {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-	}
-		
+	}		
 }

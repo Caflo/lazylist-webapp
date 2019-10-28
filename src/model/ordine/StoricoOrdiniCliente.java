@@ -3,11 +3,11 @@ package model.ordine;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OrdiniCliente {
+public class StoricoOrdiniCliente {
 
 	private Set<Ordine> ordini;
 	
-	public OrdiniCliente() {
+	public StoricoOrdiniCliente() {
 		this.ordini = new HashSet<>();
 	}
 

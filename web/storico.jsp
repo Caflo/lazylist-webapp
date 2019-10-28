@@ -62,9 +62,9 @@
 							</thead>
 							<tbody>
 							<% 
-							Set<Ordine> list = (Set<Ordine>) session.getAttribute("storicoOrdini");
+							StoricoOrdiniCliente list = (StoricoOrdiniCliente) session.getAttribute("storicoOrdini");
 							DecimalFormat decF = new DecimalFormat("0.00");
-							for(Ordine o : list)
+							for(Ordine o : list.getOrdini())
 							{
 							%>
 								<tr class="text-center">

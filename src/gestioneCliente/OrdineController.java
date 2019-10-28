@@ -31,6 +31,8 @@ import com.mongodb.util.JSON;
 
 import model.ordine.FasciaOraria;
 import model.ordine.Ordine;
+import model.prodottoECarrello.Carrello;
+import model.prodottoECarrello.RigaCarrello;
 
 public class OrdineController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -88,9 +90,50 @@ public class OrdineController extends HttpServlet {
 			String fasciaOraria = req.getParameter("fascia");
 			String tipoPagamento = req.getParameter("tipoPagamento");
 			Double totale = Double.parseDouble(req.getParameter("totale"));
+			Carrello c = this.mostraCarrello();
+			Ordine o = new Ordine();
+			o.setIdCliente(1);
+			o.setEmailCliente(email);
+			o.setCognomeCliente(cognomeCliente);
 		}
 	}
 
+	public Carrello mostraCarrello() {
+		Set<RigaCarrello> result = new HashSet<>();
+		
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+			DBCollection collection = database.getCollection("carrello");
+
+			//Lettura
+			Gson gson = new Gson();
+			JSONArray ja = new JSONArray();
+			BasicDBObject searchQuery = new BasicDBObject();
+	        DBCursor cursor = collection.find(searchQuery);
+	        while (cursor.hasNext()) {
+	            DBObject obj = cursor.next();
+	            JSONObject output = new JSONObject(JSON.serialize(obj));
+	            RigaCarrello rc = gson.fromJson(output.toString(), RigaCarrello.class);
+	            result.add(rc);
+	            ja.put(output);
+	        }
+	        
+	        //manca creare entita Carrello e calcolare subtotale
+	        
+	        //DEBUG
+	        System.out.println(ja.toString());
+		} catch (UnknownHostException | JSONException e) {
+			e.printStackTrace();
+		}
+		
+		Carrello c = new Carrello();
+		c.setRighe(result);
+		c.setSubTotale(result.stream().mapToDouble(x -> (x.getPrezzoUnitario() * (1 - x.getSconto())) * x.getQuantitaScelta()).sum());
+		
+		return c;
+	}
+	
 	private Double getCostoConsegnaByFascia(String oraInizio, String oraFine) {
 
 		FasciaOraria f = null;
