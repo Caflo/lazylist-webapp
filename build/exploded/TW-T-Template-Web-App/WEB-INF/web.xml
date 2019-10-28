@@ -67,5 +67,22 @@
 		<url-pattern>/ordineController</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>StoricoOrdiniController</servlet-name>
+		<servlet-class>gestioneCliente.StoricoOrdiniController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StoricoOrdiniController</servlet-name>
+		<url-pattern>/storicoOrdiniController</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GestioneOrdiniController</servlet-name>
+		<servlet-class>gestioneMagazzino.GestioneOrdiniController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GestioneOrdiniController</servlet-name>
+		<url-pattern>/gestioneOrdiniController</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

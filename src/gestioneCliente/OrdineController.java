@@ -142,7 +142,7 @@ public class OrdineController extends HttpServlet {
 			o.setCostoTotale(subtotale + costoConsegna);
 			session.setAttribute("ordineAttuale", o);
 			//l'ordine attuale deve essere preso dal gestore del magazzino che conferma l'ordine
-			resp.sendRedirect(req.getContextPath() + "/orderSuccess.jsp");
+			resp.sendRedirect(req.getContextPath() + "/gestioneOrdiniController");
 		}
 		
 	}

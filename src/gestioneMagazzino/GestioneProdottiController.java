@@ -16,16 +16,9 @@ public class GestioneProdottiController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		OrdiniTotali ordiniMagazzino = mostraOrdiniTotali();
-		session.setAttribute("ordini", ordiniMagazzino);
-		resp.sendRedirect(req.getContextPath() + "/ordini.jsp");
+		
 	}
 
-	private OrdiniTotali mostraOrdiniTotali() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -20,5 +20,7 @@
 	<classpathentry kind="lib" path="lib/gson-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/mongo-java-driver-2.12.3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/simple-java-mail-5.5.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
