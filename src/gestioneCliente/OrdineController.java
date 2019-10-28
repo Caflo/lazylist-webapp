@@ -74,6 +74,20 @@ public class OrdineController extends HttpServlet {
 			String output = gson.toJson(costoConsegna); //lo mando in json
 			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
 		}
+		else if (tipoOperazione.equals("richiestaOrdine")) { //click su effettua ordine
+			String email = req.getParameter("email");
+			String indirizzo = req.getParameter("indirizzo");
+			String CAP = req.getParameter("CAP");
+			Date d = null;
+			try {
+				d = df.parse(req.getParameter("data"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			String fasciaOraria = req.getParameter("fascia");
+			String tipoPagamento = req.getParameter("tipoPagamento");
+			Double totale = Double.parseDouble(req.getParameter("totale"));
+		}
 	}
 
 	private Double getCostoConsegnaByFascia(String oraInizio, String oraFine) {
