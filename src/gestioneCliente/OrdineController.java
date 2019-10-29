@@ -59,12 +59,13 @@ public class OrdineController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String tipoOperazione = req.getParameter("tipoOperazione");
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat dfStandard = new SimpleDateFormat("yyyy-MM-dd");
 
 		//Switch
 		if (tipoOperazione.equals("cercaFasce")) { //AJAX
 			Date data;
 			try {
-				data = df.parse(req.getParameter("data"));
+				data = dfStandard.parse(req.getParameter("data"));
 				Set<FasciaOraria> fasceDisponibili = this.calcolaFasceDisponibiliPerData(data);
 
 				//Invio ad ajax 
@@ -89,7 +90,7 @@ public class OrdineController extends HttpServlet {
 			String output = gson.toJson(costoConsegna); //lo mando in json
 			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
 		}
-		else if (tipoOperazione.equals("richiestaOrdine")) { //FORM click su effettua ordine
+		else if (tipoOperazione.equals("Effettua ordine")) { //FORM click su effettua ordine
 			String email = req.getParameter("email");
 			String nome = req.getParameter("nome");
 			String cognome = req.getParameter("cognome");
@@ -97,7 +98,7 @@ public class OrdineController extends HttpServlet {
 			String CAP = req.getParameter("CAP");
 			Date d = null;
 			try {
-				d = df.parse(req.getParameter("data"));
+				d = dfStandard.parse(req.getParameter("data"));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

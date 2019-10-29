@@ -52,8 +52,17 @@
 <link rel="stylesheet" href="css/flaticon.css">
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
+<script type="text/javascript"
+        src="https://raw.githubusercontent.com/jquery/jquery-ui/master/ui/i18n/datepicker-it.js">
+</script>
+  
 </head>
+
+
+
 <body class="goto-here">
+
+
 	<%@ include file="fragments/headerCliente.html"%>
 
 	<%
@@ -111,9 +120,9 @@
 							<div class="w-100"></div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="streetaddress">Data di consegna</label> <input
-										type="text" name="data" id="data" class="form-control"
-										placeholder="gg/mm/aaaa"> <input type="button"
+									<label for="streetaddress">Data di consegna</label> 
+									<input id="data" name="data" type="date" placeholder="gg/mm/aaaa"> 
+										<input type="button"
 										class="btn btn-primary py-3 px-4"
 										value="Cerca fasce disponibili" style="margin-top: 3%;"
 										onclick="cercaFasceDisponibili(myGetElementById('data').value, myGetElementById('comboBoxFasce'))">
@@ -156,7 +165,7 @@
 									</p>
 									<hr>
 									<p class="d-flex total-price">
-										<span>Totale</span> &euro;<span name="totale" id="costoTotale"><%= decF.format(c.getSubTotale()) %></span>
+										<span>Totale</span> &euro;<span id="costoTotale"><%= decF.format(c.getSubTotale()) %></span>
 									</p>
 								</div>
 							</div>
@@ -177,18 +186,17 @@
 												<label><input type="radio" name="tipoPagamento" value="Contanti"
 													class="mr-2">Contanti</label>
 											</div>
-										</div>
+										</div >									
 									</div>
-									<p>
-										<button type="submit" name="tipoOperazione" value="richiestaOrdine">
-										<a class="btn btn-primary py-3 px-4">Effettua ordine</a>
-										</button>
-									</p>
+									<p><input type="submit" name="tipoOperazione" value="Effettua ordine" class="btn btn-primary py-3 px-4"></p>
 								</div>
+								
 							</div>
+								
 						</div>
 					</div>
 					<!-- .col-md-8 -->
+				
 				</div>
 			</div>
 		</section>
@@ -260,6 +268,6 @@
 
 		});
 	</script>
-
+	
 </body>
 </html>

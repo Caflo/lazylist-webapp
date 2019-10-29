@@ -74,7 +74,7 @@ public class GestioneOrdiniController extends HttpServlet {
 			this.buildEmailAndSend(ordine, "ok");
 			
 			//Rimuovo attributo senno' ogni volta che vengo chiamato inserisco un ordine
-			session.removeAttribute("ordine");
+			session.removeAttribute("ordineAttuale");
 			
 			//Rimango alla pagina di successo
 			resp.sendRedirect(req.getContextPath() + "/orderSuccess.jsp");

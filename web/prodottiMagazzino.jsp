@@ -3,6 +3,7 @@
 <!-- import di classi Java -->
 <%@ page import="model.prodottoECarrello.*"%>
 <%@ page import="java.util.*"%>
+<%@ page import="crud.*"%>
 <%@ page import="java.text.DecimalFormat"%>
 
 <!-- pagina per la gestione di errori -->
@@ -71,7 +72,8 @@
 			</div>
 						
 			<%
-				Magazzino m = (Magazzino) session.getAttribute("prodottiMagazzino");
+				CRUDManager crud = new CRUDManager();
+				Magazzino m = (Magazzino) crud.readProdotti();
 				DecimalFormat decF = new DecimalFormat("0.00");
 				for(Prodotto p : m.getProdotti()) {
 			%>

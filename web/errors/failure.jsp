@@ -11,7 +11,6 @@
 
 <body>
 
-	<%@ include file="../fragments/header.html" %>
 
 	<div id="err" class="clear">
 		<p>
@@ -34,7 +33,6 @@
 
 	</div>
 
-	<%@ include file="../fragments/footer.html" %>
 
 </body>
 </html>

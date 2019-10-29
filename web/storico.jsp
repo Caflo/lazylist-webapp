@@ -3,6 +3,7 @@
 <!-- import di classi Java -->
 <%@ page import="model.ordine.*"%>
 <%@ page import="model.ordine.statiOrdine.*"%>
+<%@ page import="crud.*"%>
 <%@ page import="model.prodottoECarrello.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.*"%>
@@ -62,8 +63,9 @@
 								</tr>
 							</thead>
 							<tbody>
-							<% 
-							StoricoOrdiniCliente list = (StoricoOrdiniCliente) session.getAttribute("storicoOrdini");
+							<% 			
+							CRUDManager crud = new CRUDManager();
+							StoricoOrdiniCliente list = crud.readStorico();
 							DecimalFormat decF = new DecimalFormat("0.00");
 							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 							for(Ordine o : list.getOrdini())

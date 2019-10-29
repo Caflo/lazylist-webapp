@@ -3,6 +3,7 @@
 <!-- import di classi Java -->
 <%@ page import="model.prodottoECarrello.*"%>
 <%@ page import="model.ordine.*"%>
+<%@ page import="crud.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.*"%>
 
@@ -77,7 +78,8 @@
 				<div class="col-sm">Dettaglio ordine</div>
 			</div>
 			<%
-				OrdiniTotali ordini = (OrdiniTotali) session.getAttribute("ordini");
+				CRUDManager crud = new CRUDManager();
+				OrdiniTotali ordini = crud.readOrdiniTotali();
 				DecimalFormat decF = new DecimalFormat("0.00");
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				for(Ordine o : ordini.getOrdini()) {
@@ -113,8 +115,7 @@
 							
 					<%
 						} 
-						else if (o.getStatoOrdine().getStato().equals("IN_PREPARAZIONE")
-								|| o.getStatoOrdine().getStato().equals("IN_CONSEGNA")) {
+						else if (o.getStatoOrdine().getStato().equals("IN_PREPARAZIONE")) {
 					%>
 							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Aggiorna stato ordine"/>
 					<%
