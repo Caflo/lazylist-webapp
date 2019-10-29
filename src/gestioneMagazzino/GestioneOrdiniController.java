@@ -45,7 +45,7 @@ public class GestioneOrdiniController extends HttpServlet {
 		if (ordine != null) { //lo inserisco e reindirizzo a pagina di successo
 			//Aggiorno stato da Attuale a InAttesaConferma
 			ordine.aggiornaStato();
-			
+		
 			//Inserisco
 			this.inserisciOrdine(ordine);
 			
@@ -62,7 +62,7 @@ public class GestioneOrdiniController extends HttpServlet {
 			//Altrimenti visualizzo i prodotti del magazzino
 			OrdiniTotali ordiniMagazzino = this.mostraOrdiniTotali();
 			session.setAttribute("ordini", ordiniMagazzino);
-			resp.sendRedirect(req.getContextPath() + "/ordini.jsp");
+			resp.sendRedirect(req.getContextPath() + "/ordiniMagazzino.jsp");
 		}
 	}
 

@@ -23,7 +23,7 @@
 	<!-- Tomcat "tenta" in automatico le index.html e index.jsp -->
 
 	<welcome-file-list>
-		<welcome-file>visualizzazioneProdottiController</welcome-file>
+		<welcome-file>/scegliRuolo.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!-- Handle exceptions and errors -->

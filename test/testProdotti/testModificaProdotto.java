@@ -17,7 +17,7 @@ public class testModificaProdotto {
 	@Test
 	public void test() {
 		
-		ObjectId id = new ObjectId("5db57f1589495b291d1ffbb5");
+		ObjectId id = new ObjectId("5db5d8c189495cdd319ac6ce");
 		Prodotto nuovoP = new Prodotto();
 		nuovoP.setNome("Yoghurt greco AAA MODIFICATO");
 		nuovoP.setMarca("Delta");
