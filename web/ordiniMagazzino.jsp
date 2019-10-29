@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- import di classi Java -->
-<%@ page import="model.ordine.*"%>
-<%@ page import="model.ordine.statiOrdine.*"%>
 <%@ page import="model.prodottoECarrello.*"%>
+<%@ page import="model.ordine.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.*"%>
 
@@ -14,291 +13,160 @@
 <%@ page session="true"%>
 
 <head>
-<title>Ordini Magazzino</title>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Gestione Prodotti</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link
-	href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
-	rel="stylesheet">
-<link
-	href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap"
-	rel="stylesheet">
-<link
-	href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap"
-	rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-<link rel="stylesheet" href="css/animate.css">
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
 
-<link rel="stylesheet" href="css/owl.carousel.min.css">
-<link rel="stylesheet" href="css/owl.theme.default.min.css">
-<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" 
+	crossorigin="anonymous">
 
-<link rel="stylesheet" href="css/aos.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 
-<link rel="stylesheet" href="css/ionicons.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" 
+	crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="css/bootstrap-datepicker.css">
-<link rel="stylesheet" href="css/jquery.timepicker.css">
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="css/magnific-popup.css">
 
+	<link rel="stylesheet" href="css/aos.css">
 
-<link rel="stylesheet" href="css/flaticon.css">
-<link rel="stylesheet" href="css/icomoon.css">
-<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/ionicons.min.css">
+
+	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="css/jquery.timepicker.css">
+
+	<link rel="stylesheet" href="css/flaticon.css">
+
+	<link rel="stylesheet" href="css/flaticon.css">
+	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="css/style.css">
+		
 </head>
+
 
 <body class="goto-here">
 	<%@ include file="fragments/headerMagazzino.html"%>
 
 
 
+	<br><br>
+	
 	<section class="ftco-section ftco-cart">
-		<div class="container">
+		<div class="container-fluid" id="cont">
 			<div class="row">
-				<div class="col-md-12 ftco-animate">
-					<div class="cart-list">
-						<table class="table">
-							<thead class="thead-primary">
-								<tr class="text-center">
-									<th>ID Ordine</th>
-									<th>Info Cliente</th>
-									<th>Status Ordine</th>
-									<th>Prezzo</th>
-									<th>Info consegna</th>
-									<th>Dettaglio Ordine</th>
-								</tr>
-							</thead>
-							<tbody>
-							<%
-								OrdiniTotali ordini = (OrdiniTotali) session.getAttribute("ordini");
-								DecimalFormat decF = new DecimalFormat("0.00");
-								DateFormat df = new SimpleDateFormat("dd/MM/yyyy");	
-								for (Ordine o : ordini.getOrdini()) {
-							%>
-								<tr class="text-center">
-									<td class="price">1</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											consegna</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Nome Utente: </h7>
-												&emsp;Luigi</span> <a class="dropdown-item"> <h7>Cognome
-													Utente: </h7> &emsp;Bianchi </span> <a class="dropdown-item"> <h7>Email:
-														</h7> &emsp;luigibianchi@gmail.com </span>
-										</div></td>
-									<td class="price">
-										<p>In Attesa Di Conferma</p>
-										<div class="form-group">
-											<div class="col-md-12">
-												<div class="radio">
-													<button
-														style="border-radius: 10px; padding: 10px 15px; background-color: #82AE46; color: white;">Accetta</button>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="radio">
-												<button
-													style="border-radius: 10px; padding: 10px 15px; background-color: #82AE46; color: white;">Rifiuta</button>
-
-											</div>
-										</div>
-									</td>
-									<td class="price">€3.75</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Indirizzo consegna:</h7>
-												&emsp;Via larga <a class="dropdown-item"> <h7>Data
-													di consegna:</h7> &emsp;15/11/2019 <a class="dropdown-item">
-														<h7>Fascia oraria:</h7> &emsp;10.00-11.00 <a
-														class="dropdown-item"> <h7>Costo di consegna:</h7>
-															&emsp;€2.00 <a class="dropdown-item"> <h7>Metodo
-																di pagamento:</h7> &emsp;POS 
-										</div></td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<span class="dropdown-item">Acqua San
-												Bernardo&emsp;1&emsp;€1.75 </span>
-										</div></td>
-								</tr>
-								<!-- END TR-->
-								<tr class="text-center">
-									<td class="price">2</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											cliente</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Nome Utente: </h7>
-												&emsp;Francesco</span> <a class="dropdown-item"> <h7>Cognome
-													Utente: </h7> &emsp;Neri </span> <a class="dropdown-item"> <h7>Email:
-														</h7> &emsp;francesconeri@libero.it </span>
-										</div></td>
-									<td class="price">
-										<p>In Consegna</p>
-										<div class="form-group">
-											<div class="col-md-12">
-												<div class="radio">
-													<button
-														style="border-radius: 10px; padding: 10px 15px; background-color: #82AE46; color: white;">Aggiorna
-														stato</button>
-
-												</div>
-											</div>
-										</div>
-									</td>
-									<td class="price">€16.50</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											consegna</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Indirizzo consegna:</h7>
-												&emsp;Via andre costa <a class="dropdown-item"> <h7>Data
-													di consegna:</h7> &emsp;17/11/2019 <a class="dropdown-item">
-														<h7>Fascia oraria:</h7> &emsp;9.00-10.00 <a
-														class="dropdown-item"> <h7>Costo di consegna:</h7>
-															&emsp;€2.50 <a class="dropdown-item"> <h7>Metodo
-																di pagamento:</h7> &emsp;POS 
-										</div></td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<span class="dropdown-item">Salsicce&emsp;1&emsp;€6.00
-											</span> <span class="dropdown-item">Prosciutto Di
-												Parma&emsp;2&emsp;€4.00 </span>
-										</div></td>
-								</tr>
-								<!-- END TR-->
-
-								<tr class="text-center">
-									<td class="price">3</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											cliente</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Nome Utente: </h7>
-												&emsp;Mario</span> <a class="dropdown-item"> <h7>Cognome
-													Utente: </h7> &emsp;Rossi </span> <a class="dropdown-item"> <h7>Email:
-														</h7> &emsp;mariorossi@icloud.com </span>
-										</div></td>
-									<td class="price">
-										<p>In Preparazione</p>
-										<div class="form-group">
-											<div class="col-md-12">
-												<div class="radio">
-													<button
-														style="border-radius: 10px; padding: 10px 15px; background-color: #82AE46; color: white;">Aggiorna
-														stato</button>
-
-												</div>
-											</div>
-										</div>
-									</td>
-									<td class="price">€12.75</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											consegna</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Indirizzo consegna:</h7>
-												&emsp;Via murri <a class="dropdown-item"> <h7>Data
-													di consegna:</h7> &emsp;15/11/2019 <a class="dropdown-item">
-														<h7>Fascia oraria:</h7> &emsp;11.00-12.00 <a
-														class="dropdown-item"> <h7>Costo di consegna:</h7>
-															&emsp;€3.00 <a class="dropdown-item"> <h7>Metodo
-																di pagamento:</h7> &emsp;POS 
-										</div></td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<span class="dropdown-item">Acqua San
-												Bernardo&emsp;1&emsp;€1.75 </span> <span class="dropdown-item">Prosciutto
-												Di Parma&emsp;2&emsp;€4.00 </span>
-										</div></td>
-								</tr>
-								<!-- END TR-->
-								<tr class="text-center">
-									<td class="price">4</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											cliente</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Nome Utente: </h7>
-												&emsp;Elena</span> <a class="dropdown-item"> <h7>Cognome
-													Utente: </h7> &emsp;Gialli </span> <a class="dropdown-item"> <h7>Email:
-														</h7> &emsp;elenagialli@icloud.com </span>
-										</div></td>
-									<td class="price">
-										<p>In Consegna</p>
-										<div class="form-group">
-											<div class="col-md-12">
-												<div class="radio">
-													<button
-														style="border-radius: 10px; padding: 10px 15px; background-color: #82AE46; color: white;">Aggiorna
-														stato</button>
-
-												</div>
-											</div>
-										</div>
-									</td>
-									<td class="price">€9.00</td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra info
-											consegna</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<a class="dropdown-item"> <h7>Indirizzo consegna:</h7>
-												&emsp;Via zanardi <a class="dropdown-item"> <h7>Data
-													di consegna:</h7> &emsp;15/11/2019 <a class="dropdown-item">
-														<h7>Fascia oraria:</h7> &emsp;15.00-16.00 <a
-														class="dropdown-item"> <h7>Costo di consegna:</h7>
-															&emsp;€3.00 <a class="dropdown-item"> <h7>Metodo
-																di pagamento:</h7> &emsp;Contante 
-										</div></td>
-									<td class="price"><a class="nav-link dropdown-toggle"
-										href="#" id="dropdown04" data-toggle="dropdown"
-										aria-haspopup="true" aria-expanded="false">Mostra
-											dettaglio</a>
-										<div class="dropdown-menu" aria-labelledby="dropdown04">
-											<span class="dropdown-item">Salsicce&emsp;1&emsp;€6.00
-											</span>
-										</div></td>
-								</tr>
-								<%
-									}
-								%>
-							</tbody>
-						</table>
-					</div>
-				</div>
+				<div class="col-sm">ID Ordine</div>
+				<div class="col-sm">Info cliente</div>
+				<div class="col-sm">Status</div>
+				<div class="col-sm">Costo totale</div>
+				<div class="col-sm">Info consegna</div>
+				<div class="col-sm">Dettaglio ordine</div>
 			</div>
+			<%
+				OrdiniTotali ordini = (OrdiniTotali) session.getAttribute("ordini");
+				DecimalFormat decF = new DecimalFormat("0.00");
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				for(Ordine o : ordini.getOrdini()) {
+			%>
+			<!-- La tabella l'ho fatta con bootstrap dato che la table in HTML non ammette il form, quindi ho dovuto rifare la pagina -->
+			<form action="gestioneOrdiniController" method="post">					
+				<div class="row" style="border: 1px solid; border-color: #79eb15">
+				
+					<!-- l'id del prodotto mi serve e voglio visualizzarlo -->
+					<div class="col-sm">
+						<input type="text" name="id" value="<%= o.get_id().toString() %>" readonly/>
+					</div>
+					
+					
+					<div class="col-sm">
+
+	 					<a class="nav-link dropdown-toggle" href="#" id="dropdownInfoCliente" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra dettaglio</a>
+	 					
+	 					<div class="dropdown-menu" id="dropdownInfoCliente">
+								<h4 class="dropdown-item"><%= o.getNomeCliente() %></h4>
+								<h4 class="dropdown-item"><%= o.getCognomeCliente() %></h4>
+								<h4 class="dropdown-item"><%= o.getEmailCliente() %></h4>
+						</div>
+					</div>
+					
+					<div class="col-sm">
+						<p><%= o.getStatoOrdine().getStato() %></p>
+					<%
+						if (o.getStatoOrdine().getStato().equals("IN_ATTESA_CONFERMA")) {		
+					%>
+							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Rifiuta ordine"/>
+							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Accetta ordine"/>
+							
+					<%
+						} 
+						else if (o.getStatoOrdine().getStato().equals("IN_PREPARAZIONE")
+								|| o.getStatoOrdine().getStato().equals("IN_CONSEGNA")) {
+					%>
+							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Aggiorna stato ordine"/>
+					<%
+						}
+					%>
+					</div>
+					
+					<div class="col-sm">
+						<p><%= decF.format(o.getCostoTotale()) %></p>
+					</div>
+					
+					<div class="col-sm">
+
+	 					<a class="nav-link dropdown-toggle" href="#" id="dropdownInfoConsegna" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra dettaglio</a>
+	 					
+	 					<div class="dropdown-menu" id="dropdownInfoConsegna">
+								<h4 class="dropdown-item"><%= o.getIndirizzoConsegna() %></h4>
+								<h4 class="dropdown-item"><%= df.format(o.getDataConsegna()) %></h4>
+								<h4 class="dropdown-item"><%= o.getFasciaOraria().getOraInizio() + "-" + o.getFasciaOraria().getOraFine() %></h4>
+								<h4 class="dropdown-item"><%= o.getFasciaOraria().getCostoConsegna() %></h4>
+								<h4 class="dropdown-item"><%= o.getTipoPagamento().getTipoPagamento() %></h4>
+						</div>
+					</div>
+					
+					<div class="col-sm">
+	 					<a class="nav-link dropdown-toggle" href="#" id="dropdownInfoConsegna" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mostra dettaglio</a>
+	 					
+	 					<div class="dropdown-menu" id="dropdownInfoConsegna">
+	 						<%
+	 							for (LineaOrdine l : o.getLineeOrdine()) {
+	 						%>
+									<h4 class="dropdown-item"><%= l.getNomeProdotto() + " x " + l.getQuantitaScelta() %></h4>
+							<%
+								}
+							%>
+						</div>
+					</div>
+					
+					
+				</div> <!-- END ROW -->
+			</form>
+			<%
+				}
+			%>
 		</div>
 	</section>
+
 	<!-- loader -->
-	<div id="ftco-loader" class="show fullscreen">
-		<svg class="circular" width="48px" height="48px">
-			<circle class="path-bg" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke="#eeeeee" />
-			<circle class="path" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg>
-	</div>
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+				stroke="#F96D00" /></svg></div>
 
 
 	<script src="js/jquery.min.js"></script>
@@ -314,16 +182,17 @@
 	<script src="js/jquery.animateNumber.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
+	<script src="scripts/utils.js"></script>
 	<script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
-
+	
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function () {
 
 			var quantitiy = 0;
-			$('.quantity-right-plus').click(function(e) {
+			$('.quantity-right-plus').click(function (e) {
 
 				// Stop acting like a button
 				e.preventDefault();
@@ -334,11 +203,12 @@
 
 				$('#quantity').val(quantity + 1);
 
+
 				// Increment
 
 			});
 
-			$('.quantity-left-minus').click(function(e) {
+			$('.quantity-left-minus').click(function (e) {
 				// Stop acting like a button
 				e.preventDefault();
 				// Get the field name

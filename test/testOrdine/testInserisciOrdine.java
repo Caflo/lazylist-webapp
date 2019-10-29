@@ -78,7 +78,7 @@ public class testInserisciOrdine {
 		//Creo l'ordine di prova
 		Ordine o = new Ordine();
 		o.setIdCliente(1);
-		o.setEmailCliente("mariorossi@email.com");
+		o.setEmailCliente("caflo1997@gmail.com");
 		o.setNomeCliente("Mario");
 		o.setCognomeCliente("Rossi");
 		o.setDataConsegna(formatData.parse("22/09/2019"));

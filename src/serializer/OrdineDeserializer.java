@@ -73,6 +73,7 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 		// (costoConsegna e giorno) perche' il giorno lo ricavo dalla data dell'ordine
 		f.setOraInizio(fasciaObj.get("oraInizio").getAsString());
 		f.setOraFine(fasciaObj.get("oraFine").getAsString());
+		f.setCostoConsegna(fasciaObj.get("costoConsegna").getAsDouble());
 		result.setFasciaOraria(f);
 		if (jo.get("tipoPagamento").getAsString().equals("CONTANTI"))
 			result.setTipoPagamento(new Contanti());
