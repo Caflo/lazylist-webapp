@@ -56,7 +56,7 @@ public class EmailController {
 			return;
 		}
 		else {
-			//Controllo prima che l'indirizzo email e' appartenente alla whitelist
+			//Controllo prima che l'indirizzo email e' appartenente alla whitelist senno' non invio
 			if (!whiteList.contains(EMAIL_TO)) { //errore
 				System.out.println("L'email inserita non fa parte della whitelist");
 				System.out.println("WhiteList:");
