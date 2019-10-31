@@ -84,6 +84,7 @@
 		<servlet-name>GestioneOrdiniController</servlet-name>
 		<url-pattern>/gestioneOrdiniController</url-pattern>
 	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>GestioneProdottiController</servlet-name>
 		<servlet-class>gestioneMagazzino.GestioneProdottiController</servlet-class>
@@ -93,5 +94,31 @@
 		<url-pattern>/gestioneProdottiController</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>GestioneCorrieriController</servlet-name>
+		<servlet-class>gestioneMagazzino.GestioneCorrieriController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GestioneCorrieriController</servlet-name>
+		<url-pattern>/gestioneCorrieriController</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GestioneFasceOrarieController</servlet-name>
+		<servlet-class>gestioneMagazzino.GestioneFasceOrarieController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GestioneFasceOrarieController</servlet-name>
+		<url-pattern>/gestioneFasceOrarieController</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OrdiniInConsegnaController</servlet-name>
+		<servlet-class>gestioneCorriere.OrdiniInConsegnaController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OrdiniInConsegnaController</servlet-name>
+		<url-pattern>/ordiniInConsegnaController</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

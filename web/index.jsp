@@ -42,6 +42,10 @@
 	<link rel="stylesheet" href="css/flaticon.css">
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css"> 
+	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>	
 
 	<script type="text/javascript">
 		function addToCart(nomeProdotto){
@@ -66,8 +70,22 @@
 </head>
 
 <body class="goto-here">
-	<%@ include file="fragments/headerCliente.html"%>	
+
+	<%
+		ReadManager crud = new ReadManager();
+		Catalogo c = crud.readCatalogo();
+		DecimalFormat decF = new DecimalFormat("0.00");
+		DecimalFormat decFSconto = new DecimalFormat("#.##");
+		Long totCarrello = crud.readCarrello().getRighe().stream().count();
+		session.setAttribute("totCarrello", totCarrello);
+	%>
 	
+	<jsp:include page="fragments/headerCliente.jsp" />
+
+	<div class="alert fade in" id="alert_aggiuntaCarrello" style="display:none;">
+	    <button type="button" class="close">×</button>
+	    Your error message goes here...
+	</div>
 	
 	<section class="ftco-section">
 		<div class="container">
@@ -75,25 +93,22 @@
 				<div class="col-md-12 heading-section text-center ftco-animate">
 					<span class="subheading">Prodotti Offerti</span>
 					<h2 class="mb-4">Il nostro catalogo</h2>
-					<p>Prodotti tipici di prima qualità  direttamente a casa tua</p>
+					<p>Prodotti tipici di prima qualità  direttamente a casa tua</p>					
 				</div>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
 				
-				<%
-					CRUDManager crud = new CRUDManager();
-					Catalogo c = crud.readCatalogo();
-					DecimalFormat decF = new DecimalFormat("0.00");
-					for (Prodotto p : c.getProdotti()) {
-				%>
-				
+			<%
+				for (Prodotto p : c.getProdotti()) {
+			%>
+	
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid" src="images/foodImage.png"
 								alt="Colorlib Template">
-							<span class="status"><%= p.getSconto() * 100%>&percnt;</span>
+							<span class="status"><%= decFSconto.format(p.getSconto() * 100) %>&percnt;</span>
 							<span class="flag"><img class="flagImage" height="32" width="32"
 									src="images/italia.jpg"></span>
 							<div class="overlay"></div>
@@ -109,8 +124,8 @@
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
 									<form id="aggiuntaCarrello" action="carrelloController" method="POST">
-										<input type="text" name="nomeProdotto" value="<%=p.getNome()%>" hidden/>
-										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" type="submit" name="tipoOperazione" value="aggiungiAlCarrello">
+										<input type="text" name="nomeProdotto" value="<%= p.getNome() %>" hidden/>
+										<button style="background-color: Transparent; background-repeat:no-repeat; border: none; cursor:pointer; overflow: hidden;" onclick="$('alert_aggiuntaCarrello').show()" name="tipoOperazione" value="aggiungiAlCarrello">
 											<a class="buy-now d-flex justify-content-center align-items-center mx-1">
 												<span><i class="ion-ios-cart"></i></span>
 											</a>
@@ -138,6 +153,14 @@
 			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
 				stroke="#F96D00" /></svg></div>
 
+	<script>
+		$(document).ready(function () {
+			$('.alert .close').on('click', function(e) {
+			    $(this).parent().hide();
+			});
+		});
+		
+	</script>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-migrate-3.0.1.min.js"></script>

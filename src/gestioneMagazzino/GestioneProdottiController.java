@@ -98,10 +98,6 @@ public class GestioneProdottiController extends HttpServlet {
 
 	private void modificaProdotto(Prodotto p) {
 		
-		//Non uso gli ID di mongoDB anche perche' senno' si dovrebbe aggiungere la cella alla tabella relativa all'id
-		
-		//Vedo se trovo almeno una tupla, se la trovo la aggiorno, altrimenti la inserisco
-		
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);
 			DB database = mongoClient.getDB("testDB");

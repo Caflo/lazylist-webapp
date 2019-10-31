@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body class="goto-here">
-	<%@ include file="fragments/headerCliente.html"%>
+	<%@ include file="fragments/headerCliente.jsp"%>
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
@@ -61,12 +61,13 @@
 							    </thead>
 							    <tbody>
 							    <%
-									CRUDManager crud = new CRUDManager();
-								    Carrello c = crud.readCarrello();
-									DecimalFormat decF = new DecimalFormat("0.00");
+							    	ReadManager crud = new ReadManager();
+	    						    Carrello c = crud.readCarrello();
+	    							DecimalFormat decF = new DecimalFormat("0.00");
+	    							DecimalFormat decFSconto = new DecimalFormat("#.##");
 
-							    	if (c != null) { //altrimenti niente
-										for (RigaCarrello r : c.getRighe()) {
+	    					    	if (c != null) { //altrimenti niente
+	    								for (RigaCarrello r : c.getRighe()) {
 							    %>
 							      <tr class="text-center">
 							        <td class="product-remove">
@@ -99,7 +100,7 @@
 										</form>
 						          	</div>
 						          </td>
-								  	<td class="sconto"><%= r.getSconto() * 100 %> &percnt;</td>
+								  	<td class="sconto"><%= decFSconto.format(r.getSconto() * 100) %> &percnt;</td>
 								  	<!--  Subtotale riga: non esiste nel modello del dominio e ce lo calcoliamo -->
 							        <td class="total">&euro; <%= decF.format(r.getPrezzoUnitario() * (1 - r.getSconto()) * r.getQuantitaScelta()) %></td>
 							      </tr><!-- END TR-->

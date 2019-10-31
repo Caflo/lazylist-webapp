@@ -44,7 +44,7 @@
 </head>
 
 <body class="goto-here">
-<%@ include file="fragments/headerCliente.html"%>
+<%@ include file="fragments/headerCliente.jsp"%>
 
 	<section class="ftco-section ftco-cart">
 		<div class="container">
@@ -63,13 +63,13 @@
 								</tr>
 							</thead>
 							<tbody>
-							<% 			
-							CRUDManager crud = new CRUDManager();
-							StoricoOrdiniCliente list = crud.readStorico();
-							DecimalFormat decF = new DecimalFormat("0.00");
-							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-							for(Ordine o : list.getOrdini())
-							{
+							<%
+								ReadManager crud = new ReadManager();
+												StoricoOrdiniCliente list = crud.readStorico();
+												DecimalFormat decF = new DecimalFormat("0.00");
+												DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+												for(Ordine o : list.getOrdini())
+												{
 							%>
 								<tr class="text-center">
 									<td class="price"><%= df.format(o.getDataConsegna()) %></td>

@@ -69,6 +69,7 @@ public class GestioneOrdiniController extends HttpServlet {
 		
 			//Inserisco
 			this.inserisciOrdine(ordine);
+			this.svuotaCarrello();
 			
 			//Mando email
 			this.buildEmailAndSend(ordine, "ok");
@@ -87,7 +88,6 @@ public class GestioneOrdiniController extends HttpServlet {
 		}		
 	}
 
-	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -245,12 +245,26 @@ public class GestioneOrdiniController extends HttpServlet {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
 
-		
-		
 		//Mando email
 		this.buildEmailAndSend(daRifiutare, "rifiutato");
+	}
+	
+	private void svuotaCarrello() {
+
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+						
+			//Svuoto il carrello
+			DBCollection collection = database.getCollection("carrello");
+			BasicDBObject document = new BasicDBObject();
+			collection.remove(document);
+    
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	private void buildEmailAndSend(Ordine ordine, String azione) {
@@ -270,12 +284,12 @@ public class GestioneOrdiniController extends HttpServlet {
 				testo.append("\nRiepilogo dell'ordine:\n");
 				for (LineaOrdine l : ordine.getLineeOrdine()) {
 					testo.append("Prodotto: " + l.getNomeProdotto() 
-						+ " x " + l.getQuantitaScelta() 
+						+ " QNT. " + l.getQuantitaScelta() 
 						+ "    EUR: " + decF.format(l.getPrezzoUnitarioScontato()));
 					testo.append("\n");
-					testo.append("Costo spedizione: EUR " + decF.format(ordine.getFasciaOraria().getCostoConsegna()));
-					testo.append("\nTotale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 				}
+				testo.append("Costo spedizione: EUR " + decF.format(ordine.getFasciaOraria().getCostoConsegna()));
+				testo.append("\nTotale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 			break;
 			case "IN_CONSEGNA":
 				emailController.setEMAIL_SUBJECT("Ordine in consegna");
@@ -283,12 +297,12 @@ public class GestioneOrdiniController extends HttpServlet {
 				testo.append("\nRiepilogo dell'ordine:\n");
 				for (LineaOrdine l : ordine.getLineeOrdine()) {
 					testo.append("Prodotto: " + l.getNomeProdotto() 
-						+ " x " + l.getQuantitaScelta() 
+						+ " QNT. " + l.getQuantitaScelta() 
 						+ "    EUR: " + decF.format(l.getPrezzoUnitarioScontato()));
 					testo.append("\n");
-					testo.append("Costo spedizione: EUR " + decF.format(ordine.getFasciaOraria().getCostoConsegna()));
-					testo.append("\nTotale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 				}
+				testo.append("Costo spedizione: EUR " + decF.format(ordine.getFasciaOraria().getCostoConsegna()));
+				testo.append("\nTotale ordine: EUR " + decF.format(ordine.getCostoTotale()));
 			break;
 			case "CONSEGNATO":
 				emailController.setEMAIL_SUBJECT("Ordine consegnato");

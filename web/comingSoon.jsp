@@ -15,7 +15,7 @@
 	    Problemi? <a href="">Contattaci</a>
 	  </p>
 	  <p class="lead">
-	    <a class="btn btn-primary btn-sm" href= <%= request.getContextPath() + "/index.jsp" %> role="button">Ritorna alla homepage</a>
+	    <button class="btn btn-primary btn-sm" onclick="window.history.back()">Torna indietro</button>
 	  </p>
 	</div>
 </body>

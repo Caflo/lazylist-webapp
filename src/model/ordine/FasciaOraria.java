@@ -1,16 +1,21 @@
 package model.ordine;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.Date;
+import org.bson.types.ObjectId;
 
 public class FasciaOraria {
 
+	private ObjectId _id;
 	private String oraInizio; //GSON rompe e allora ho messo i due tipi String
 	private String oraFine;
 	private String giorno;
 	private Double costoConsegna;
 	
+	public ObjectId get_id() {
+		return _id;
+	}
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
 	public String getOraInizio() {
 		return oraInizio;
 	}

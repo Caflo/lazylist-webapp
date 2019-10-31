@@ -61,7 +61,7 @@
 
 
 <body class="goto-here">
-	<%@ include file="fragments/headerMagazzino.html"%>
+	<%@ include file="fragments/headerCorriere.html"%>
 
 
 
@@ -79,13 +79,13 @@
 			</div>
 			<%
 				ReadManager crud = new ReadManager();
-					OrdiniTotali ordini = crud.readOrdiniTotali();
+					OrdiniInConsegna ordini = crud.readOrdiniInConsegna();
 					DecimalFormat decF = new DecimalFormat("0.00");
 					DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 					for(Ordine o : ordini.getOrdini()) {
 			%>
 			<!-- La tabella l'ho fatta con bootstrap dato che la table in HTML non ammette il form, quindi ho dovuto rifare la pagina -->
-			<form action="gestioneOrdiniController" method="post">					
+			<form action="ordiniInConsegnaController" method="post">					
 				<div class="row" style="border: 1px solid; border-color: #79eb15">
 				
 					<!-- l'id del prodotto mi serve e voglio visualizzarlo -->
@@ -107,20 +107,8 @@
 					
 					<div class="col-sm">
 						<p><%= o.getStatoOrdine().getStato() %></p>
-					<%
-						if (o.getStatoOrdine().getStato().equals("IN_ATTESA_CONFERMA")) {		
-					%>
-							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Rifiuta ordine"/>
-							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Accetta ordine"/>
-							
-					<%
-						} 
-						else if (o.getStatoOrdine().getStato().equals("IN_PREPARAZIONE")) {
-					%>
-							<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Aggiorna stato ordine"/>
-					<%
-						}
-					%>
+						<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Consegnato"/>
+						<input class="btn btn-primary" type="submit" name="tipoOperazione" value="Non consegnato"/>
 					</div>
 					
 					<div class="col-sm">

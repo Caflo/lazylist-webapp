@@ -34,7 +34,7 @@ public class testInserisciFasciaOraria {
 		f.setGiorno(DayOfWeek.FRIDAY.getDisplayName(TextStyle.FULL, Locale.ITALY));
 		f.setOraInizio("18:00");
 		f.setOraFine("19:00");
-		f.setCostoConsegna(6.00);
+		f.setCostoConsegna(2.00);
 		
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);

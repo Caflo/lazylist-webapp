@@ -72,11 +72,11 @@
 			</div>
 						
 			<%
-				CRUDManager crud = new CRUDManager();
-				Magazzino m = (Magazzino) crud.readProdotti();
-				DecimalFormat decF = new DecimalFormat("0.00");
-				for(Prodotto p : m.getProdotti()) {
-			%>
+										ReadManager crud = new ReadManager();
+											Magazzino m = (Magazzino) crud.readProdotti();
+											DecimalFormat decF = new DecimalFormat("0.00");
+											for(Prodotto p : m.getProdotti()) {
+									%>
 			<!-- La tabella l'ho fatta con bootstrap dato che la table in HTML non ammette il form, quindi ho dovuto rifare la pagina -->
 			<form action="gestioneProdottiController" method="post">					
 				<div class="row" style="border: 1px solid; border-color: #79eb15">
