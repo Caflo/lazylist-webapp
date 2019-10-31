@@ -1,5 +1,6 @@
 package model.prodottoECarrello;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Carrello {
@@ -7,6 +8,10 @@ public class Carrello {
 	private Set<RigaCarrello> righe;
 	private Double subTotale;
 
+	public Carrello() {
+		righe = new HashSet<>();
+	}
+	
 	public Double getSubTotale() {
 		return subTotale;
 	}

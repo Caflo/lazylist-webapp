@@ -43,8 +43,18 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+
+		//FILTRO
+		HttpSession session = req.getSession();
+		String filtro = req.getParameter("filtro");
+		if (filtro.equals("Tutti")) {
+			resp.sendRedirect(req.getContextPath() + "/visualizzazioneProdottiController");
+		}
+		else {
+			Catalogo filtrato = this.filtraProdotti(filtro);
+			session.setAttribute("catalogo", filtrato);
+			resp.sendRedirect(req.getContextPath() + "/index.jsp");
+		}
 	}
 
 
@@ -80,5 +90,41 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 			e.printStackTrace();
 		}
 		return c;
+	}
+	
+	private Catalogo filtraProdotti(String filtro) {
+
+		Set<Prodotto> result = new HashSet<>();
+		Catalogo c = new Catalogo();
+		
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+			DBCollection collection = database.getCollection("prodotti");
+
+			//Lettura
+			Gson gson = new Gson();
+			JSONArray ja = new JSONArray();
+			BasicDBObject searchQuery = new BasicDBObject();
+			searchQuery.put("categoria", filtro);
+	        DBCursor cursor = collection.find(searchQuery);
+	        while (cursor.hasNext()) {
+	            DBObject obj = cursor.next();
+	            JSONObject output = new JSONObject(JSON.serialize(obj));
+	            Prodotto p = gson.fromJson(output.toString(), Prodotto.class);
+	            result.add(p);
+	            ja.put(output);
+	        }
+    
+	        
+	        c.setProdotti(result);
+	        
+	        //DEBUG
+	        System.out.println(ja.toString());
+		} catch (UnknownHostException | JSONException e) {
+			e.printStackTrace();
+		}
+		return c;
+		
 	}
 }

@@ -61,9 +61,10 @@ public class CarrelloController extends HttpServlet {
 		
 		//Switch
 		if (tipoOperazione.equals("aggiungiAlCarrello")) {
+			//AJAX
 			String nomeProdotto = req.getParameter("nomeProdotto");
 			this.aggiungiAlCarrello(nomeProdotto);
-			resp.sendRedirect(req.getContextPath() + "/index.jsp");
+			//Non rispondo con niente, non mi serve niente
 		}
 		else if (tipoOperazione.equals("eliminaDalCarrello")) {
 			String nomeProdotto = req.getParameter("nomeProdotto");
