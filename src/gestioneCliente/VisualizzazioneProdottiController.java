@@ -48,11 +48,12 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String filtro = req.getParameter("filtro");
 		if (filtro.equals("Tutti")) {
+			session.removeAttribute("prodottiFiltrati");
 			resp.sendRedirect(req.getContextPath() + "/visualizzazioneProdottiController");
 		}
 		else {
-			Catalogo filtrato = this.filtraProdotti(filtro);
-			session.setAttribute("catalogo", filtrato);
+			Set<Prodotto> prodottiFiltrati = this.filtraProdotti(filtro);
+			session.setAttribute("prodottiFiltrati", prodottiFiltrati);
 			resp.sendRedirect(req.getContextPath() + "/index.jsp");
 		}
 	}
@@ -92,10 +93,9 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 		return c;
 	}
 	
-	private Catalogo filtraProdotti(String filtro) {
+	private Set<Prodotto> filtraProdotti(String filtro) {
 
 		Set<Prodotto> result = new HashSet<>();
-		Catalogo c = new Catalogo();
 		
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);
@@ -115,16 +115,13 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 	            result.add(p);
 	            ja.put(output);
 	        }
-    
-	        
-	        c.setProdotti(result);
-	        
+    	        
 	        //DEBUG
 	        System.out.println(ja.toString());
 		} catch (UnknownHostException | JSONException e) {
 			e.printStackTrace();
 		}
-		return c;
+		return result;
 		
 	}
 }

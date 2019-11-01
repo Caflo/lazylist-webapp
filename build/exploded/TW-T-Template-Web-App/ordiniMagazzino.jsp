@@ -124,7 +124,7 @@
 					</div>
 					
 					<div class="col-sm">
-						<p><%= decF.format(o.getCostoTotale()) %></p>
+						<p>&euro;<%= decF.format(o.getCostoTotale()) %></p>
 					</div>
 					
 					<div class="col-sm">
@@ -135,7 +135,7 @@
 								<h4 class="dropdown-item"><%= o.getIndirizzoConsegna() %></h4>
 								<h4 class="dropdown-item"><%= df.format(o.getDataConsegna()) %></h4>
 								<h4 class="dropdown-item"><%= o.getFasciaOraria().getOraInizio() + "-" + o.getFasciaOraria().getOraFine() %></h4>
-								<h4 class="dropdown-item"><%= o.getFasciaOraria().getCostoConsegna() %></h4>
+								<h4 class="dropdown-item">&euro;<%= decF.format(o.getFasciaOraria().getCostoConsegna()) %></h4>
 								<h4 class="dropdown-item"><%= o.getTipoPagamento().getTipoPagamento() %></h4>
 						</div>
 					</div>
@@ -147,7 +147,7 @@
 	 						<%
 	 							for (LineaOrdine l : o.getLineeOrdine()) {
 	 						%>
-									<h4 class="dropdown-item"><%= l.getNomeProdotto() + " x " + l.getQuantitaScelta() %></h4>
+									<h4 class="dropdown-item"><%= l.getNomeProdotto() + "  QNT. " + l.getQuantitaScelta() %></h4>
 							<%
 								}
 							%>

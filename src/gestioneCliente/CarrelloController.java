@@ -64,24 +64,82 @@ public class CarrelloController extends HttpServlet {
 			//AJAX
 			String nomeProdotto = req.getParameter("nomeProdotto");
 			this.aggiungiAlCarrello(nomeProdotto);
+			Integer totCarrello = (Integer) session.getAttribute("totCarrello");
+			session.setAttribute("totCarrello", ++totCarrello);
 			//Non rispondo con niente, non mi serve niente
 		}
 		else if (tipoOperazione.equals("eliminaDalCarrello")) {
 			String nomeProdotto = req.getParameter("nomeProdotto");
+			Integer qnt = this.readQuantita(nomeProdotto);
 			this.eliminaDalCarrello(nomeProdotto);
-			// Passo di nuovo alla doGet che reimpostera' il carrello
+			Integer totCarrello = (Integer) session.getAttribute("totCarrello");
+			session.setAttribute("totCarrello", totCarrello - qnt);
 			resp.sendRedirect(req.getContextPath() + "/carrelloController");
 		}
 		else if (tipoOperazione.equals("modificaQuantita")) {
 			String nomeProdotto = req.getParameter("nomeProdotto");
 			Integer nuovaQuantita = Integer.parseInt(req.getParameter("quantity"));
+			Integer vecchiaQuantita = this.readQuantita(nomeProdotto);
 			this.modificaQuantita(nomeProdotto, nuovaQuantita);
-			// Passo di nuovo alla doGet che reimpostera' il carrello
-			resp.sendRedirect(req.getContextPath() + "/carrelloController");
+			Integer totCarrello = (Integer) session.getAttribute("totCarrello");
+			if (nuovaQuantita > vecchiaQuantita) {
+				Integer amount = Math.abs(nuovaQuantita - vecchiaQuantita);
+				session.setAttribute("totCarrello", totCarrello + amount);
+			}
+			else if (nuovaQuantita < vecchiaQuantita) {
+				Integer amount = Math.abs(nuovaQuantita - vecchiaQuantita);
+				session.setAttribute("totCarrello", totCarrello - amount);
+			}
 		}	
+		else if (tipoOperazione.equals("Svuota carrello")) {
+			this.svuotaCarrello();
+			session.setAttribute("totCarrello", 0);
+		}
+		
+		// Passo di nuovo alla doGet che reimpostera' il carrello
+		resp.sendRedirect(req.getContextPath() + "/carrelloController");
 		
 	}
 	
+	private void svuotaCarrello() {
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+						
+			//Svuoto il carrello
+			DBCollection collection = database.getCollection("carrello");
+			BasicDBObject document = new BasicDBObject();
+			collection.remove(document);
+    
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}		
+	}
+
+	private Integer readQuantita(String nomeProdotto) {
+		Integer result = null;
+		
+		try {
+			MongoClient mongoClient = new MongoClient("localhost" , 27017);
+			DB database = mongoClient.getDB("testDB");
+			DBCollection collection = database.getCollection("carrello");
+
+			//Lettura
+			Gson gson = new Gson();
+			JSONArray ja = new JSONArray();
+			BasicDBObject searchQuery = new BasicDBObject();
+			searchQuery.put("nomeProdotto", nomeProdotto);
+	        Integer quantita = (Integer) collection.findOne(searchQuery).get("quantitaScelta");
+	        result = quantita;
+	          
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+
 	private void eliminaDalCarrello(String nomeProdotto) {	
 		try {
 			MongoClient mongoClient = new MongoClient("localhost" , 27017);

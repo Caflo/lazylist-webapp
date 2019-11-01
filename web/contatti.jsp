@@ -37,7 +37,7 @@
 
 <body>
 
-	<%@ include file="fragments/headerCliente.html"%>
+	<%@ include file="fragments/headerCliente.jsp"%>
 
 	<div class="bg-light py-5">
 		<div class="container py-5">

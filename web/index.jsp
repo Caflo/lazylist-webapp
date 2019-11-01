@@ -80,9 +80,14 @@
 
 	<%
 		ReadManager crud = new ReadManager();
-		Catalogo c = (Catalogo) session.getAttribute("catalogo");
-		if (c == null)
+		Catalogo c = new Catalogo();
+		Set<Prodotto> prodotti = (Set<Prodotto>) session.getAttribute("prodottiFiltrati");
+		
+		if (prodotti == null) {
 			c = crud.readCatalogo();
+		}
+		else
+			c.setProdotti(prodotti);
 		DecimalFormat decF = new DecimalFormat("0.00");
 		DecimalFormat decFSconto = new DecimalFormat("#.##");
 		Set<RigaCarrello> righe = crud.readCarrello().getRighe();
@@ -113,34 +118,19 @@
 					<button class="btn btn-primary btn-space" name="filtro" value="Tutti">Tutti</button>
 				</form>	
 				
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Carne">Carne</button>
-				</form>
+				<%
+					Set<String> categorieDiverse = new HashSet<>();
+					for (Prodotto p : crud.readCatalogo().getProdotti())
+						categorieDiverse.add(p.getCategoria());
+					for (String s : categorieDiverse) {
+				%>
+					<form action="visualizzazioneProdottiController" method="post">
+						<button class="btn btn-primary btn-space" name="filtro" value="<%= s %>"><%= s %></button>
+					</form>
+				<%
+					}
+				%>
 				
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Latticini">Latticini</button>
-				</form>
-				
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Salumi">Salumi</button>
-				</form>
-				
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Surgelati">Surgelati</button>
-				</form>		
-
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Surgelati">Surgelati</button>
-				</form>	
-
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Insaccati">Insaccati</button>
-				</form>	
-				
-				<form action="visualizzazioneProdottiController" method="post">
-					<button class="btn btn-primary btn-space" name="filtro" value="Prodotti alternativi">Prodotti alternativi</button>
-				</form>	
-					
 			</div>
 				
 		</div>

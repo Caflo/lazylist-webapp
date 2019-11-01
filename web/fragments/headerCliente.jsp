@@ -5,6 +5,8 @@
 
 <%
 	Integer totCarrello = (Integer) session.getAttribute("totCarrello");
+	if (totCarrello == null)
+		totCarrello = 0;
 %>
 
 <header id="header">
@@ -45,7 +47,7 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active"><a href="visualizzazioneProdottiController" class="nav-link">Catalogo</a></li>
                     <li class="nav-item cta cta-colored"><a href="carrelloController" class="nav-link"><span
-                                class="icon-shopping_cart"></span><p id="totCarrello" value="<%= totCarrello %>">[<%= totCarrello %>]</p></a></li>
+                                class="icon-shopping_cart"></span><p style="display:inline" id="totCarrello" value="<%= totCarrello %>">[<%= totCarrello %>]</p></a></li>
     
                     <li class="nav-item"><a href="storicoOrdiniController" class="nav-link">Storico Ordini</a></li>
                     <li class="nav-item"><a href="./comingSoon.jsp" class="nav-link">Info Account</a></li>

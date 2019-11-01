@@ -45,6 +45,10 @@
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
+					<form action="carrelloController" method="post">
+    					<input type="submit" class="btn btn-primary" name="tipoOperazione" value="Svuota carrello"/>
+    				</form>
+    				<br><br>
 	    			<div class="col-md-12 ftco-animate">
 	    				<div class="cart-list">
 		    				<table class="table">
