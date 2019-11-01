@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 public class RigaCarrello {
 
 	private String idProdotto;
+	private String imagePath;
 	private String nomeProdotto;
 	private Integer quantitaScelta;
 	private Double prezzoUnitario;
@@ -15,6 +16,12 @@ public class RigaCarrello {
 	}
 	public void setIdProdotto(String idProdotto) {
 		this.idProdotto = idProdotto;
+	}
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 	public String getNomeProdotto() {
 		return nomeProdotto;

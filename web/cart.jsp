@@ -85,7 +85,7 @@
 										</form>
 									</td>
 							        
-							        <td class="image-prod"><div class="img" style="background-image:url(images/foodImage.png);"></div></td>
+							        <td class="image-prod"><div class="img" style="background-image:url(images/products/<%= r.getImagePath() %>);"></div></td>
 							        
 							        <td class="product-name">
 							        	<h3><%= r.getNomeProdotto() %></h3>

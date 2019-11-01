@@ -226,6 +226,7 @@ public class CarrelloController extends HttpServlet {
 	        else {
 		        BasicDBObject document = new BasicDBObject();
 		        document.put("idProdotto", p.get_id().toString()); //nelle righe carrello e in linea ordine lo metto come stringa
+		        document.put("imagePath", p.getImagePath());
 		        document.put("nomeProdotto", nomeProdotto);
 		        document.put("quantitaScelta", 1);
 		        document.put("prezzoUnitario", p.getPrezzo());

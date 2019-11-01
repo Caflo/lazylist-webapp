@@ -64,6 +64,7 @@ public class GestioneProdottiController extends HttpServlet {
 		Integer unitaDisponibili = Integer.parseInt(req.getParameter("unitaDisponibili"));
 		Boolean disponibile = Boolean.parseBoolean(req.getParameter("disponibile"));
 		Prodotto p = new Prodotto();
+		p.setImagePath(req.getParameter("imagePath"));
 		p.setNome(nome);
 		p.setCategoria(categoria);
 		p.setMarca(marca);
@@ -109,6 +110,7 @@ public class GestioneProdottiController extends HttpServlet {
 			BasicDBObject query = new BasicDBObject();
         	query.put("_id", p.get_id());
 	        BasicDBObject newDocument = new BasicDBObject();
+	        newDocument.put("imagePath", p.getImagePath());
 	        newDocument.put("nome", p.getNome());
 	        newDocument.put("marca", p.getMarca());
 	        newDocument.put("categoria", p.getCategoria());
@@ -135,6 +137,7 @@ public class GestioneProdottiController extends HttpServlet {
 			//Inserimento
 			DBCollection collection = database.getCollection("prodotti");
 	        BasicDBObject document = new BasicDBObject();
+	        document.put("imagePath", p.getImagePath());
 	        document.put("nome", p.getNome());
 	        document.put("marca", p.getMarca());
 	        document.put("categoria", p.getCategoria());

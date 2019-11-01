@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 public class Prodotto {
 
 	private ObjectId _id;
+	private String imagePath;
 	private String nome;
 	private String categoria;
 	private String marca;
@@ -20,6 +21,12 @@ public class Prodotto {
 	}
 	public void set_id(ObjectId _id) {
 		this._id = _id;
+	}
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 	public String getNome() {
 		return nome;

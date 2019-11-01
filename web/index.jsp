@@ -166,7 +166,7 @@
 	
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/foodImage.png"
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/products/<%= p.getImagePath() %>"
 								alt="Colorlib Template">
 							<%
 								if (p.getSconto() != 0) {

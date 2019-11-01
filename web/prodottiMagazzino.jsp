@@ -72,11 +72,11 @@
 			</div>
 						
 			<%
-										ReadManager crud = new ReadManager();
-											Magazzino m = (Magazzino) crud.readProdotti();
-											DecimalFormat decF = new DecimalFormat("0.00");
-											for(Prodotto p : m.getProdotti()) {
-									%>
+				ReadManager crud = new ReadManager();
+				Magazzino m = (Magazzino) crud.readProdotti();
+				DecimalFormat decF = new DecimalFormat("0.00");
+				for(Prodotto p : m.getProdotti()) {
+			%>
 			<!-- La tabella l'ho fatta con bootstrap dato che la table in HTML non ammette il form, quindi ho dovuto rifare la pagina -->
 			<form action="gestioneProdottiController" method="post">					
 				<div class="row" style="border: 1px solid; border-color: #79eb15">
@@ -91,7 +91,8 @@
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
-						<input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value="<%= p.getProvenienza() %>"/></p>
+						<input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value="<%= p.getProvenienza() %>"/>
+						<input type="file" name="imagePath" style="border-radius: 10px; width: 80%" /><p><%= p.getImagePath() %></p>				
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
@@ -103,10 +104,7 @@
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
-					
-							<input type="checkbox" name="disponibile" value="<%= p.getDisponibile().booleanValue() %>" checked/>
-					
-					
+						<input type="checkbox" name="disponibile" value="<%= p.getDisponibile().booleanValue() %>" checked/>		
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
