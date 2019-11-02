@@ -1,16 +1,21 @@
 package model.prodottoECarrello;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Catalogo {
 	
-	private Set<Prodotto> prodotti;
+	private List<Prodotto> prodotti;
 
-	public Set<Prodotto> getProdotti() {
+	public Catalogo() {
+		this.prodotti = new ArrayList<>();
+	}
+
+	public List<Prodotto> getProdotti() {
 		return prodotti;
 	}
 
-	public void setProdotti(Set<Prodotto> prodotti) {
+	public void setProdotti(List<Prodotto> prodotti) {
 		this.prodotti = prodotti;
 	}
 

@@ -101,7 +101,7 @@ public class OrdiniInConsegnaController extends HttpServlet {
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
 			ordiniInConsegna.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}	
 		return ordiniInConsegna;
 	}

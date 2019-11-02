@@ -81,21 +81,21 @@
 						<div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">Nome</label> <input type="text"
-										name="nome" class="form-control" placeholder="">
+										name="nome" class="form-control" placeholder="" required>
 								</div>
 							</div>
 							
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">Cognome</label> <input type="text"
-										name="cognome" class="form-control" placeholder="">
+										name="cognome" class="form-control" placeholder="" required>
 								</div>
 							</div>
 							
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">Email</label> <input type="text"
-										name="email" class="form-control" placeholder="">
+										name="email" class="form-control" placeholder="" required>
 								</div>
 							</div>
 
@@ -103,7 +103,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="phone">Indirizzo</label> <input type="text"
-										name="indirizzo" class="form-control" placeholder="">
+										name="indirizzo" class="form-control" placeholder="" required>
 								</div>
 							</div>
 							<div class="w-100"></div>
@@ -112,7 +112,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="phone">CAP</label> <input type="text" name="CAP"
-										class="form-control" placeholder="">
+										class="form-control" placeholder="" required>
 								</div>
 							</div>
 							<div class="w-100"></div>
@@ -121,7 +121,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="streetaddress">Data di consegna</label> 
-									<input id="data" name="data" type="date" placeholder="gg/mm/aaaa"> 
+									<input id="data" name="data" type="date" placeholder="gg/mm/aaaa" required> 
 										<input type="button"
 										class="btn btn-primary py-3 px-4"
 										value="Cerca fasce disponibili" style="margin-top: 3%;"
@@ -139,7 +139,7 @@
 											<span class="ion-ios-arrow-down"></span>
 										</div>
 										<select id="comboBoxFasce" name="fascia" class="form-control"
-											onchange="calcolaNuovoCosto()">
+											onchange="calcolaNuovoCosto()" required>
 
 										</select>
 									</div>
@@ -176,7 +176,7 @@
 										<div class="col-md-12">
 											<div class="radio">
 												<label><input type="radio" name="tipoPagamento" value="POS"
-													class="mr-2">POS</label>
+													class="mr-2" required>POS</label>
 											</div>
 										</div>
 									</div>
@@ -184,7 +184,7 @@
 										<div class="col-md-12">
 											<div class="radio">
 												<label><input type="radio" name="tipoPagamento" value="Contanti"
-													class="mr-2">Contanti</label>
+													class="mr-2" required>Contanti</label>
 											</div>
 										</div >									
 									</div>

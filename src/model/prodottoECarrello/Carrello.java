@@ -1,15 +1,16 @@
 package model.prodottoECarrello;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class Carrello {
 	
-	private Set<RigaCarrello> righe;
+	private List<RigaCarrello> righe;
 	private Double subTotale;
 
 	public Carrello() {
-		righe = new HashSet<>();
+		righe = new ArrayList<>();
 	}
 	
 	public Double getSubTotale() {
@@ -20,12 +21,12 @@ public class Carrello {
 		this.subTotale = subTotale;
 	}
 
-	public Set<RigaCarrello> getRighe() {
+	public List<RigaCarrello> getRighe() {
 		return righe;
 	}
 
-	public void setRighe(Set<RigaCarrello> righe) {
-		this.righe = righe;
+	public void setRighe(List<RigaCarrello> result) {
+		this.righe = result;
 	}
 	
 	

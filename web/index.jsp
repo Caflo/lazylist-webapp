@@ -81,7 +81,7 @@
 	<%
 		ReadManager crud = new ReadManager();
 		Catalogo c = new Catalogo();
-		Set<Prodotto> prodotti = (Set<Prodotto>) session.getAttribute("prodottiFiltrati");
+		List<Prodotto> prodotti = (List<Prodotto>) session.getAttribute("prodottiFiltrati");
 		
 		if (prodotti == null) {
 			c = crud.readCatalogo();
@@ -90,7 +90,7 @@
 			c.setProdotti(prodotti);
 		DecimalFormat decF = new DecimalFormat("0.00");
 		DecimalFormat decFSconto = new DecimalFormat("#.##");
-		Set<RigaCarrello> righe = crud.readCarrello().getRighe();
+		List<RigaCarrello> righe = crud.readCarrello().getRighe();
 		Integer totCarrello = 0;
 		for (RigaCarrello r : righe) {
 			if (r.getQuantitaScelta() != null)

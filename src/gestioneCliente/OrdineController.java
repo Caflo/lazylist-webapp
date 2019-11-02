@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -62,7 +64,7 @@ public class OrdineController extends HttpServlet {
 			Date data;
 			try {
 				data = dfStandard.parse(req.getParameter("data"));
-				Set<FasciaOraria> fasceDisponibili = this.calcolaFasceDisponibiliPerData(data);
+				List<FasciaOraria> fasceDisponibili = this.calcolaFasceDisponibiliPerData(data);
 
 				//Invio ad ajax 
 				Gson gson = new Gson();
@@ -146,7 +148,7 @@ public class OrdineController extends HttpServlet {
 	}
 
 	public Carrello mostraCarrello() {
-		Set<RigaCarrello> result = new HashSet<>();
+		List<RigaCarrello> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -188,13 +190,13 @@ public class OrdineController extends HttpServlet {
 		return f.getCostoConsegna();
 	}
 
-	private Set<FasciaOraria> calcolaFasceDisponibiliPerData(Date data) {
+	private List<FasciaOraria> calcolaFasceDisponibiliPerData(Date data) {
 		
 		SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE", Locale.ITALY);
         
 		String giornoDellaData = simpleDateformat.format(data);
 		
-		Set<FasciaOraria> result = new HashSet<>();
+		List<FasciaOraria> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");

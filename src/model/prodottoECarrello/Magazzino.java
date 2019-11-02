@@ -1,21 +1,22 @@
 package model.prodottoECarrello;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class Magazzino {
 
-	private Set<Prodotto> prodotti;
+	private List<Prodotto> prodotti;
 
 	public Magazzino() {
-		prodotti = new HashSet<>();
+		prodotti = new ArrayList<>();
 	}
 	
-	public Set<Prodotto> getProdotti() {
+	public List<Prodotto> getProdotti() {
 		return prodotti;
 	}
 
-	public void setProdotti(Set<Prodotto> prodotti) {
+	public void setProdotti(List<Prodotto> prodotti) {
 		this.prodotti = prodotti;
 	}
 	

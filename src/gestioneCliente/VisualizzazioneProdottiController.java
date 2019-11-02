@@ -1,9 +1,11 @@
 package gestioneCliente;
 
+import static com.mongodb.client.model.Sorts.descending;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +29,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Sorts.*;
-
+import com.mongodb.client.model.Sorts;
 
 import model.prodottoECarrello.Catalogo;
 import model.prodottoECarrello.Prodotto;
@@ -58,7 +59,7 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/visualizzazioneProdottiController");
 		}
 		else {
-			Set<Prodotto> prodottiFiltrati = this.filtraProdotti(filtro);
+			List<Prodotto> prodottiFiltrati = this.filtraProdotti(filtro);
 			session.setAttribute("prodottiFiltrati", prodottiFiltrati);
 			resp.sendRedirect(req.getContextPath() + "/index.jsp");
 		}
@@ -68,7 +69,7 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 	private Catalogo mostraCatalogo() {
 		
 		Catalogo catalogo = new Catalogo();	
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -87,12 +88,12 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 		}).create();
 		
 		Bson sort = descending("nome");
-		FindIterable<Document> foundData = collection.find().sort(sort);
-		for (Document d : foundData) {
-			Prodotto curr = gson.fromJson(d.toJson(), Prodotto.class);
+		MongoCursor<Document> foundData = collection.find(new Document()).sort(Sorts.ascending("nome")).cursor();
+		while (foundData.hasNext()) {
+			Prodotto curr = gson.fromJson(foundData.next().toJson(), Prodotto.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(d.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		catalogo.setProdotti(result);
@@ -100,9 +101,9 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 
 	}
 	
-	private Set<Prodotto> filtraProdotti(String filtro) {
+	private List<Prodotto> filtraProdotti(String filtro) {
 
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -112,13 +113,11 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 		Gson gson = new Gson();
 		Document filter = new Document();
 		filter.put("categoria", filtro);
-		MongoCursor<Document> foundData = collection.find(filter).sort(descending("_id")).cursor();
+		MongoCursor<Document> foundData = collection.find(filter).sort(Sorts.ascending("nome")).cursor();
 		while (foundData.hasNext()) {
-		    Document obj = foundData.next();
-			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			Prodotto curr = gson.fromJson(foundData.next().toJson(), Prodotto.class);
 			result.add(curr);
-			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		return result;
 		

@@ -2,8 +2,8 @@ package gestioneMagazzino;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +24,9 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
 
 import model.prodottoECarrello.Magazzino;
 import model.prodottoECarrello.Prodotto;
@@ -138,7 +140,7 @@ public class GestioneProdottiController extends HttpServlet {
 
 	private Magazzino mostraMagazzino() {
 		Magazzino magazzino = new Magazzino();	
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -156,12 +158,12 @@ public class GestioneProdottiController extends HttpServlet {
 			
 		}).create();
 		
-		FindIterable<Document> foundData = collection.find(new Document());
-		for (Document d : foundData) {
-			Prodotto curr = gson.fromJson(d.toJson(), Prodotto.class);
+		MongoCursor<Document> foundData = collection.find(new Document()).sort(Sorts.ascending("nome")).cursor();
+		while (foundData.hasNext()) {
+			Prodotto curr = gson.fromJson(foundData.next().toJson(), Prodotto.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(d.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		magazzino.setProdotti(result);

@@ -1,8 +1,8 @@
 package gestioneCliente;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 //
 import javax.servlet.ServletException;
@@ -134,7 +134,7 @@ public class CarrelloController extends HttpServlet {
 	}
 
 	public Carrello mostraCarrello() {
-		Set<RigaCarrello> result = new HashSet<>();
+		List<RigaCarrello> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -147,7 +147,7 @@ public class CarrelloController extends HttpServlet {
 		    RigaCarrello curr = gson.fromJson(d.toJson(), RigaCarrello.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(d.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		Carrello c = new Carrello();

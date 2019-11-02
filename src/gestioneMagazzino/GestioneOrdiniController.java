@@ -114,7 +114,7 @@ public class GestioneOrdiniController extends HttpServlet {
 			Ordine curr = gson.fromJson(d.toJson(), Ordine.class);
 			ordiniTotali.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(d.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		return ordiniTotali;

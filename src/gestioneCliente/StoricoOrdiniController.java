@@ -57,7 +57,7 @@ public class StoricoOrdiniController extends HttpServlet {
 			Ordine curr = gson.fromJson(d.toJson(), Ordine.class);
 			result.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(d.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		return result;
 	}

@@ -1,16 +1,13 @@
 package crud;
 
 import java.lang.reflect.Type;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,12 +15,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
 
 import model.ordine.FasciaOraria;
 import model.ordine.Ordine;
@@ -45,7 +42,7 @@ public class ReadManager {
 	public Magazzino readProdotti() {
 
 		Magazzino magazzino = new Magazzino();	
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -63,13 +60,12 @@ public class ReadManager {
 			
 		}).create();
 		
-		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		MongoCursor<Document> foundData = collection.find(new Document()).sort(Sorts.ascending("nome")).cursor();
 		while (foundData.hasNext()) {
-		    Document obj = foundData.next();
-			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			Prodotto curr = gson.fromJson(foundData.next().toJson(), Prodotto.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		magazzino.setProdotti(result);
@@ -95,7 +91,7 @@ public class ReadManager {
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
 			ordiniTotali.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		return ordiniTotali;
@@ -118,7 +114,7 @@ public class ReadManager {
 		    FasciaOraria curr = gson.fromJson(obj.toJson(), FasciaOraria.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}	
 		return result;
 	}
@@ -141,7 +137,7 @@ public class ReadManager {
 		    FasciaOraria curr = gson.fromJson(obj.toJson(), FasciaOraria.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		return result;
@@ -153,7 +149,7 @@ public class ReadManager {
 	public Catalogo readCatalogo() {
 
 		Catalogo catalogo = new Catalogo();	
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -171,13 +167,12 @@ public class ReadManager {
 			
 		}).create();
 		
-		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		MongoCursor<Document> foundData = collection.find(new Document()).sort(Sorts.ascending("nome")).cursor();
 		while (foundData.hasNext()) {
-		    Document obj = foundData.next();
-			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			Prodotto curr = gson.fromJson(foundData.next().toJson(), Prodotto.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		catalogo.setProdotti(result);
@@ -185,7 +180,7 @@ public class ReadManager {
 	}
 	
 	public Carrello readCarrello() {
-		Set<RigaCarrello> result = new HashSet<>();
+		List<RigaCarrello> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -199,7 +194,7 @@ public class ReadManager {
 		    RigaCarrello curr = gson.fromJson(obj.toJson(), RigaCarrello.class);
 			result.add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		
 		Carrello c = new Carrello();
@@ -228,7 +223,7 @@ public class ReadManager {
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
 			result.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}
 		return result;
 	}
@@ -252,7 +247,7 @@ public class ReadManager {
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
 			ordiniInConsegna.getOrdini().add(curr);
 			//DEBUG
-		    System.out.println(obj.toJson().toString());
+		    System.out.println(curr.toString());
 		}		
 		return ordiniInConsegna;
 	}

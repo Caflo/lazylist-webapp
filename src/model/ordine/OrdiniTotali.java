@@ -1,23 +1,24 @@
 package model.ordine;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class OrdiniTotali {
 
-	private Set<Ordine> ordini;
+	private List<Ordine> ordini;
 
 	public OrdiniTotali() {
-		this.ordini = new HashSet<>();
+		this.ordini = new ArrayList<>();
 	}
 	
-	public Set<Ordine> getOrdini() {
+	public List<Ordine> getOrdini() {
 		return ordini;
 	}
 
-	public void setOrdini(Set<Ordine> ordini) {
+	public void setOrdini(List<Ordine> ordini) {
 		this.ordini = ordini;
 	}
-	
 	
 }

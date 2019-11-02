@@ -2,7 +2,9 @@ package testProdotti;
 
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bson.Document;
@@ -21,6 +23,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
 
 import model.prodottoECarrello.Prodotto;
 
@@ -29,7 +32,7 @@ public class testLetturaProdotti {
 	@Test
 	public void test() {
 		 		
-		Set<Prodotto> result = new HashSet<>();
+		List<Prodotto> result = new ArrayList<>();
 		
 		MongoClient mongoClient = MongoClients.create();
 		MongoDatabase database = mongoClient.getDatabase("testDB");
@@ -49,7 +52,7 @@ public class testLetturaProdotti {
 		
 		Document myDoc = collection.find().first();
 		System.out.println(myDoc.toJson());
-		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		MongoCursor<Document> foundData = collection.find(new Document()).sort(Sorts.ascending("nome")).cursor();
 		while (foundData.hasNext()) {
 		    Document obj = foundData.next();
 			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
@@ -57,6 +60,9 @@ public class testLetturaProdotti {
 			//DEBUG
 		    System.out.println(obj.toJson().toString());
 		}
+		
+		for (Prodotto p : result)
+			System.out.println(p.getNome());
 	}
 	
 }
