@@ -73,7 +73,9 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 			Gson gson = new Gson();
 			JSONArray ja = new JSONArray();
 			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
+			BasicDBObject orderBy = new BasicDBObject();
+			orderBy.put("nome", 1);
+	        DBCursor cursor = collection.find(searchQuery).sort(orderBy);
 	        while (cursor.hasNext()) {
 	            DBObject obj = cursor.next();
 	            JSONObject output = new JSONObject(JSON.serialize(obj));

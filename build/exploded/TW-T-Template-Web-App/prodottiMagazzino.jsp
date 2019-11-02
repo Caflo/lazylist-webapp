@@ -72,11 +72,11 @@
 			</div>
 						
 			<%
-										ReadManager crud = new ReadManager();
-											Magazzino m = (Magazzino) crud.readProdotti();
-											DecimalFormat decF = new DecimalFormat("0.00");
-											for(Prodotto p : m.getProdotti()) {
-									%>
+				ReadManager crud = new ReadManager();
+				Magazzino m = (Magazzino) crud.readProdotti();
+				DecimalFormat decF = new DecimalFormat("0.00");
+				for(Prodotto p : m.getProdotti()) {
+			%>
 			<!-- La tabella l'ho fatta con bootstrap dato che la table in HTML non ammette il form, quindi ho dovuto rifare la pagina -->
 			<form action="gestioneProdottiController" method="post">					
 				<div class="row" style="border: 1px solid; border-color: #79eb15">
@@ -91,7 +91,10 @@
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
-						<input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value="<%= p.getProvenienza() %>"/></p>
+						<input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value="<%= p.getProvenienza() %>"/>
+						<br>
+						<input type="text" name="imagePath" value="<%= p.getImagePath() %>" style="border-radius: 10px; width: 80%" />
+						<input type="file" value="<%= p.getImagePath() %>" onchange="changeImage(this)" style="border-radius: 10px; width: 80%" />
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
@@ -103,10 +106,7 @@
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
-					
-							<input type="checkbox" name="disponibile" value="<%= p.getDisponibile().booleanValue() %>" checked/>
-					
-					
+						<input type="checkbox" name="disponibile" value="<%= p.getDisponibile().booleanValue() %>" checked/>		
 					</div>
 					
 					<div class="col-sm" style="margin-top: 2.3%">
@@ -159,7 +159,7 @@
 			//nome, categoria, marca
 			var col1 = '<div class="col-sm"><p style="text-align: left;">Nome: <input type="text" name="nome" style="border-radius: 10px; width: 100%" "/></p> <p style="text-align: left;">Categoria: <input type="text" name="categoria" style="border-radius: 10px; width: 100%" value=""/></p> <p style="text-align: left;">Marca: <input type="text" name="marca" style="border-radius: 10px; width: 100%" value=""/></p> </div>';
 			//provenienza
-			var col2 = '<div class="col-sm" style="margin-top: 2.3%"><input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value=""/></p> </div>';
+			var col2 = '<div class="col-sm" style="margin-top: 2.3%"><input type="text" name="provenienza" style="border-radius: 10px; width: 80%" value=""/><br><input type="text" name="imagePath" value="" style="border-radius: 10px; width: 80%" /><input type="file" value="" onchange="changeImage(this)" style="border-radius: 10px; width: 80%" /></div>';
 			//prezzo
 			var col3 = '<div class="col-sm" style="margin-top: 2.3%">&euro;<input type="text" name="prezzo" style="border-radius: 10px; width: 70%;" value=""/></div>';
 			//sconto
@@ -185,40 +185,16 @@
 	</script>
 	
 	<script>
-		$(document).ready(function () {
-
-			var quantitiy = 0;
-			$('.quantity-right-plus').click(function (e) {
-
-				// Stop acting like a button
-				e.preventDefault();
-				// Get the field name
-				var quantity = parseInt($('#quantity').val());
-
-				// If is not undefined
-
-				$('#quantity').val(quantity + 1);
-
-
-				// Increment
-
-			});
-
-			$('.quantity-left-minus').click(function (e) {
-				// Stop acting like a button
-				e.preventDefault();
-				// Get the field name
-				var quantity = parseInt($('#quantity').val());
-
-				// If is not undefined
-
-				// Increment
-				if (quantity > 0) {
-					$('#quantity').val(quantity - 1);
-				}
-			});
-
-		});
+		
+		
+	function changeImage(node) {
+		var parent = node.parentNode;
+		var newValue = node.value;
+		var target = parent.querySelector('input[name="imagePath"]');
+		newValue = newValue.replace(/^.*\\/, "");
+		target.value = newValue;
+	}
+	
 	</script>
 
 </body>

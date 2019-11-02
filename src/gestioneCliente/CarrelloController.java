@@ -74,7 +74,6 @@ public class CarrelloController extends HttpServlet {
 			this.eliminaDalCarrello(nomeProdotto);
 			Integer totCarrello = (Integer) session.getAttribute("totCarrello");
 			session.setAttribute("totCarrello", totCarrello - qnt);
-			resp.sendRedirect(req.getContextPath() + "/carrelloController");
 		}
 		else if (tipoOperazione.equals("modificaQuantita")) {
 			String nomeProdotto = req.getParameter("nomeProdotto");
