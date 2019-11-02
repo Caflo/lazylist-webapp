@@ -2,12 +2,13 @@ package testProdotti;
 
 import java.net.UnknownHostException;
 
+import org.bson.Document;
 import org.junit.Test;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import model.prodottoECarrello.Prodotto;
 
@@ -17,7 +18,7 @@ public class testAggiungiProdotto {
 	public void test() {
 		//Prodotto di prova
 		Prodotto p = new Prodotto();
-		p.setNome("Yoghurt greco 100gr");
+		p.setNome("Yoghurt greco AGGIUNTO 100gr");
 		p.setMarca("Delta");
 		p.setCategoria("Latticini");
 		p.setProvenienza("Grecia");
@@ -26,27 +27,23 @@ public class testAggiungiProdotto {
 		p.setUnitaDisponibili(11);
 		p.setDisponibile(true);
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("prodotti");
-	        BasicDBObject document = new BasicDBObject();
-	        document.put("nome", p.getNome());
-	        document.put("marca", p.getMarca());
-	        document.put("categoria", p.getCategoria());
-	        document.put("provenienza", p.getProvenienza());
-	        document.put("prezzo", p.getPrezzo());
-	        document.put("sconto", p.getSconto());
-	        document.put("unitaDisponibili", p.getUnitaDisponibili());
-	        document.put("disponibile", p.getDisponibile());
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
+		
+		//Inserimento
+		Document document = new Document();
+		document.put("nome", p.getNome());
+		document.put("imagePath", p.getImagePath());
+		document.put("marca", p.getMarca());
+		document.put("categoria", p.getCategoria());
+		document.put("provenienza", p.getProvenienza());
+		document.put("prezzo", p.getPrezzo());
+		document.put("sconto", p.getSconto());
+		document.put("unitaDisponibili", p.getUnitaDisponibili());
+		document.put("disponibile", p.getDisponibile());
 
-	        collection.insert(document);
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		collection.insertOne(document);
 	}
 			
 }

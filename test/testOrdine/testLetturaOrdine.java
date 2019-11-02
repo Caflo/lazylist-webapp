@@ -1,21 +1,15 @@
 package testOrdine;
 
-import java.net.UnknownHostException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.bson.Document;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.Ordine;
 import model.ordine.OrdiniTotali;
@@ -25,35 +19,24 @@ public class testLetturaOrdine {
 
 	@Test
 	public void test() {
-		
-		//può essere anche OrdiniInConsegna o OrdiniCliente, è un esempio
+	
 		OrdiniTotali ordiniTotali = new OrdiniTotali();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
+		//Lettura
+
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
 		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				ordiniTotali.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
+			ordiniTotali.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
 	}
 }

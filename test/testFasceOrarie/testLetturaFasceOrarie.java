@@ -4,22 +4,18 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.json.JSONArray;
+import org.bson.Document;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.FasciaOraria;
-import model.prodottoECarrello.RigaCarrello;
 
 public class testLetturaFasceOrarie {
 
@@ -28,28 +24,21 @@ public class testLetturaFasceOrarie {
 		
 		Set<FasciaOraria> result = new HashSet<>();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("fasceOrarie");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("fasceOrarie");
 
-			//Lettura
-			Gson gson = new Gson();
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            FasciaOraria rc = gson.fromJson(output.toString(), FasciaOraria.class);
-	            result.add(rc);
-	            ja.put(output);
-	        }
-	             
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		//Lettura
+		Gson gson = new Gson();
+		Document myDoc = collection.find().first();
+		System.out.println(myDoc.toJson());
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+		    FasciaOraria curr = gson.fromJson(obj.toJson(), FasciaOraria.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
 		
 	}

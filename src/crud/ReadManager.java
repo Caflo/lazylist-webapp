@@ -3,8 +3,10 @@ package crud;
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,13 +18,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.FasciaOraria;
 import model.ordine.Ordine;
@@ -43,162 +44,107 @@ public class ReadManager {
 	
 	public Magazzino readProdotti() {
 
-		Magazzino result = new Magazzino();	
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("prodotti");
+		Magazzino magazzino = new Magazzino();	
+		Set<Prodotto> result = new HashSet<>();
+		
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
 
-			//Lettura
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
 			
-			//Necessario registrare la callback siccome Gson non traduce correttamente gli ObjectID di mongoDB
-	        Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).create();
-	        
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-			BasicDBObject orderBy = new BasicDBObject();
-			orderBy.put("nome", 1);
-	        DBCursor cursor = collection.find(searchQuery).sort(orderBy);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            Prodotto p = gson.fromJson(obj.toString(), Prodotto.class);
-	            result.getProdotti().add(p);
-	            ja.put(output);
-	        }
-    
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		}).create();
+		
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
-		return result;
+		
+		magazzino.setProdotti(result);
+		return magazzino;
 	}
 	
 	public OrdiniTotali readOrdiniTotali() {
 
 		OrdiniTotali ordiniTotali = new OrdiniTotali();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
+		//Lettura
+
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+
 		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				ordiniTotali.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
+			ordiniTotali.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
+		
 		return ordiniTotali;
 	}
 	
 	
 	public Set<FasciaOraria> readFasceOrarie() {
-		
+	
 		Set<FasciaOraria> result = new HashSet<>();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("fasceOrarie");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("fasceOrarie");
 
-			//Lettura (anche qui, siccome c'e' l'id, serve deserializzarlo correttamente
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).create();
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            FasciaOraria rc = gson.fromJson(output.toString(), FasciaOraria.class);
-	            result.add(rc);
-	            ja.put(output);
-	        }
-	             
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
-		}		
+		//Lettura
+		Gson gson = new Gson();
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+		    FasciaOraria curr = gson.fromJson(obj.toJson(), FasciaOraria.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
+		}	
 		return result;
-
 	}
 	
 	public Set<FasciaOraria> readFasceOrariePerGiorno(String giorno) {
 		
 		Set<FasciaOraria> result = new HashSet<>();
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("fasceOrarie");
-
-			//Lettura (anche qui, siccome c'e' l'id, serve deserializzarlo correttamente
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
 				
-			}).create();
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-			searchQuery.put("giorno", giorno);
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            FasciaOraria rc = gson.fromJson(output.toString(), FasciaOraria.class);
-	            result.add(rc);
-	            ja.put(output);
-	        }
-	             
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
-		}		
-		return result;
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("fasceOrarie");
 
+		//Lettura
+		Gson gson = new Gson();
+		Document query = new Document();
+		query.put("giorno", giorno);
+		MongoCursor<Document> foundData = collection.find(query).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+		    FasciaOraria curr = gson.fromJson(obj.toJson(), FasciaOraria.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
+		}
+		
+		return result;
 	}
 
 	
@@ -206,65 +152,54 @@ public class ReadManager {
 
 	public Catalogo readCatalogo() {
 
+		Catalogo catalogo = new Catalogo();	
 		Set<Prodotto> result = new HashSet<>();
-		Catalogo c = new Catalogo();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("prodotti");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
 
-			//Lettura
-			Gson gson = new Gson();
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            Prodotto p = gson.fromJson(output.toString(), Prodotto.class);
-	            result.add(p);
-	            ja.put(output);
-	        }
-    
-	        
-	        c.setProdotti(result);
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
+			
+		}).create();
+		
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
-		return c;
+		
+		catalogo.setProdotti(result);
+		return catalogo;
 	}
 	
 	public Carrello readCarrello() {
 		Set<RigaCarrello> result = new HashSet<>();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("carrello");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
 
-			//Lettura
-			Gson gson = new Gson();
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            RigaCarrello rc = gson.fromJson(output.toString(), RigaCarrello.class);
-	            result.add(rc);
-	            ja.put(output);
-	        }
-	        
-	        //manca creare entita Carrello e calcolare subtotale
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		//Lettura
+		Gson gson = new Gson();
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+		    RigaCarrello curr = gson.fromJson(obj.toJson(), RigaCarrello.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
 		
 		Carrello c = new Carrello();
@@ -277,33 +212,24 @@ public class ReadManager {
 	public StoricoOrdiniCliente readStorico() {
 
 		StoricoOrdiniCliente result = new StoricoOrdiniCliente();
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+				
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
+		//Lettura
+
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+
 		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				result.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
+			result.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
-		
 		return result;
 	}
 	
@@ -311,34 +237,23 @@ public class ReadManager {
 	
 	public OrdiniInConsegna readOrdiniInConsegna() {
 		OrdiniInConsegna ordiniInConsegna = new OrdiniInConsegna();
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
-		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+		//Lettura
 
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				if (curr.getStatoOrdine().getStato().equals("IN_CONSEGNA"))
-					ordiniInConsegna.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
-		}
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+
+		
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
+			ordiniInConsegna.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
+		}		
 		return ordiniInConsegna;
 	}
 

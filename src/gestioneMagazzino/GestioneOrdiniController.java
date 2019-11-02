@@ -1,12 +1,12 @@
 package gestioneMagazzino;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -15,25 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.LineaOrdine;
 import model.ordine.Ordine;
@@ -109,32 +100,23 @@ public class GestioneOrdiniController extends HttpServlet {
 
 		OrdiniTotali ordiniTotali = new OrdiniTotali();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
+		//Lettura
+
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+
 		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				ordiniTotali.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		FindIterable<Document> foundData = collection.find(new Document());
+		for (Document d : foundData) {
+			Ordine curr = gson.fromJson(d.toJson(), Ordine.class);
+			ordiniTotali.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(d.toJson().toString());
 		}
+		
 		return ordiniTotali;
 	}
 	
@@ -143,128 +125,94 @@ public class GestioneOrdiniController extends HttpServlet {
 		DateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
 		DateFormat formatOrario = new SimpleDateFormat("HH:mm"); //uso sempre quello di Date perche' Gson ha problemi con la serializzazione di java.time
 
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("ordini");
-	        BasicDBObject document = new BasicDBObject();
-	        document.put("idCliente", o.getIdCliente());
-	        document.put("emailCliente", o.getEmailCliente());
-	        document.put("nomeCliente", o.getNomeCliente());
-	        document.put("cognomeCliente", o.getCognomeCliente());
-	        document.put("dataConsegna", formatData.format(o.getDataConsegna()));
-	        document.put("indirizzoConsegna", o.getIndirizzoConsegna());
-	        document.put("CAP", o.getCAP());
-	        BasicDBObject fascia = new BasicDBObject()
-	        		.append("oraInizio", o.getFasciaOraria().getOraInizio())
-	        		.append("oraFine", o.getFasciaOraria().getOraFine())
-	        		.append("costoConsegna", o.getFasciaOraria().getCostoConsegna());
-	        document.put("fasciaOraria", fascia);
-	        document.put("tipoPagamento", o.getTipoPagamento().getTipoPagamento());
-	        document.put("statoOrdine", o.getStatoOrdine().getStato());
-	        document.put("costoTotale", o.getCostoTotale());
-	        BasicDBList linee = new BasicDBList();
-	        for (LineaOrdine linea : o.getLineeOrdine()) {
-	        	linee.add(new BasicDBObject("idProdotto", linea.getIdProdotto())
-	        			.append("nomeProdotto", linea.getNomeProdotto())
-	        			.append("prezzoUnitarioScontato", linea.getPrezzoUnitarioScontato())
-	        			.append("quantitaScelta", linea.getQuantitaScelta()));
-	        }
-	        document.put("lineeOrdine", linee);
-
-	        collection.insert(document);
-	        
-	        System.out.println(document.toString());
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
+		
+		//Inserimento
+		Document ordine = new Document();
+		ordine.put("idCliente", o.getIdCliente());
+		ordine.put("emailCliente", o.getEmailCliente());
+		ordine.put("nomeCliente", o.getNomeCliente());
+		ordine.put("cognomeCliente", o.getCognomeCliente());
+		ordine.put("dataConsegna", formatData.format(o.getDataConsegna()));
+		ordine.put("indirizzoConsegna", o.getIndirizzoConsegna());
+		ordine.put("CAP", o.getCAP());
+		Document fascia = new Document()
+				.append("oraInizio", o.getFasciaOraria().getOraInizio())
+				.append("oraFine", o.getFasciaOraria().getOraFine())
+				.append("costoConsegna", o.getFasciaOraria().getCostoConsegna());
+		ordine.put("fasciaOraria", fascia);
+		ordine.put("tipoPagamento", o.getTipoPagamento().getTipoPagamento());
+		ordine.put("statoOrdine", o.getStatoOrdine().getStato());
+		ordine.put("costoTotale", o.getCostoTotale());
+		List<Document> linee = new ArrayList<>();
+		for (LineaOrdine linea : o.getLineeOrdine()) {
+			linee.add(new Document("idProdotto", linea.getIdProdotto())
+					.append("nomeProdotto", linea.getNomeProdotto())
+					.append("prezzoUnitarioScontato", linea.getPrezzoUnitarioScontato())
+					.append("quantitaScelta", linea.getQuantitaScelta()));
 		}
+		ordine.put("lineeOrdine", linee);
+
+		collection.insertOne(ordine);
+		
+		System.out.println(ordine.toString());
 	
 	}
 	
 	private void aggiornaStatoOrdine(String id) {
 
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Lettura ordine
-			//Lettura
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-			
-			DBCollection collection = database.getCollection("ordini");
-			BasicDBObject query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        Ordine result = gson.fromJson(collection.findOne(query).toString(), Ordine.class);
-	        result.aggiornaStato();
-
-			//Modifica
-			query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        BasicDBObject newDocument = new BasicDBObject();
-	        newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", newDocument);
-	        collection.update(query, updateObject);
-	        
-	      //Mando email
-			this.buildEmailAndSend(result, "ok");
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 		
+		Document query = new Document();
+		query.put("_id", new ObjectId(id));
+		Ordine result = gson.fromJson(collection.find(query).first().toJson(), Ordine.class);
+		
+		result.aggiornaStato();
+			  	         
+		Document newDocument = new Document();
+		newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
+		 
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+		 
+		collection.updateOne(query, updateObject);
+		
+		//Mando email
+		this.buildEmailAndSend(result, "ok");
 	}
 	
 
 	private void rifiutaOrdine(String id) { //si elimina l'ordine
 		
 		Ordine daRifiutare = null;
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Leggo l'ordine in questione (in particolare mi serve la mail)
-			daRifiutare = this.mostraOrdiniTotali().getOrdini().stream().filter(x -> x.get_id().equals(new ObjectId(id))).findFirst().get();
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("ordini");
-	        collection.remove(new BasicDBObject("_id", new ObjectId(id)));
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
+		
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
+				
+		//Leggo l'ordine in questione (in particolare mi serve la mail)
+		daRifiutare = this.mostraOrdiniTotali().getOrdini().stream().filter(x -> x.get_id().equals(new ObjectId(id))).findFirst().get();
+		
+		//Eliminazione
+		collection.deleteOne(new Document("_id", new ObjectId(id)));
+		
 		//Mando email
 		this.buildEmailAndSend(daRifiutare, "rifiutato");
 	}
 	
 	private void svuotaCarrello() {
 
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-						
-			//Svuoto il carrello
-			DBCollection collection = database.getCollection("carrello");
-			BasicDBObject document = new BasicDBObject();
-			collection.remove(document);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
 		
+		//Svuota tutto
+		collection.drop();		
 	}
 	
 	private void buildEmailAndSend(Ordine ordine, String azione) {

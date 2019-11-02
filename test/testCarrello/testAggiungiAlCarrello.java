@@ -2,13 +2,14 @@ package testCarrello;
 
 import java.net.UnknownHostException;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import model.prodottoECarrello.Prodotto;
 import model.prodottoECarrello.RigaCarrello;
@@ -37,26 +38,22 @@ public class testAggiungiAlCarrello {
 		riga.setQuantitaScelta(1);
 		riga.setPrezzoUnitario(p.getPrezzo());
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("carrello");
-	        BasicDBObject document = new BasicDBObject();
-	        document.put("idProdotto", riga.getIdProdotto()); //nelle righe carrello e in linea ordine lo metto come stringa
-	        document.put("nomeProdotto", p.getNome());
-	        document.put("quantitaScelta", 1);
-	        document.put("prezzoUnitario", p.getPrezzo());
-	        document.put("sconto", p.getSconto());
-	        
-	        //Automaticamente mongoDB inserirà anche un campo _id ma nel carrello me ne sbatto altamente, non mi serve
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
+		
+		//Inserimento
+		Document document = new Document();
+		document.put("idProdotto", riga.getIdProdotto()); //nelle righe carrello e in linea ordine lo metto come stringa
+		document.put("imagePath", p.getImagePath());
+		document.put("nomeProdotto", p.getNome());
+		document.put("quantitaScelta", 1);
+		document.put("prezzoUnitario", p.getPrezzo());
+		document.put("sconto", p.getSconto());
+		
+		//Automaticamente mongoDB inserirà anche un campo _id ma nel carrello me ne sbatto altamente, non mi serve
 
-	        collection.insert(document);
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		collection.insertOne(document);
 		
 	}
 }

@@ -9,12 +9,13 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+import org.bson.Document;
 import org.junit.Test;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.FasciaOraria;
 
@@ -36,24 +37,19 @@ public class testInserisciFasciaOraria {
 		f.setOraFine("19:00");
 		f.setCostoConsegna(2.00);
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("fasceOrarie");
-	        BasicDBObject document = new BasicDBObject();
-		    document.put("oraInizio", f.getOraInizio());
-		    document.put("oraFine", f.getOraFine());
-		    document.put("giorno", f.getGiorno());
-		    document.put("costoConsegna", f.getCostoConsegna());
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("fasceOrarie");
+		
+		//Inserimento
+		Document document = new Document();
+		document.put("oraInizio", f.getOraInizio());
+		document.put("oraFine", f.getOraFine());
+		document.put("giorno", f.getGiorno());
+		document.put("costoConsegna", f.getCostoConsegna());
 
-		    collection.insert(document);
-	        
-	        System.out.println(document.toString());
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		collection.insertOne(document);
+		
+		System.out.println(document.toString());
 	}
 }

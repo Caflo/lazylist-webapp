@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,15 +25,15 @@ import com.google.gson.JsonParseException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 import model.ordine.LineaOrdine;
 import model.ordine.Ordine;
 import model.ordine.OrdiniInConsegna;
-import model.ordine.OrdiniTotali;
 import model.ordine.statiOrdine.Consegnato;
 import model.ordine.statiOrdine.NonConsegnato;
 import notificaEmail.EmailController;
@@ -88,119 +86,97 @@ public class OrdiniInConsegnaController extends HttpServlet {
 
 	private OrdiniInConsegna mostraOrdiniInConsegna() {
 		OrdiniInConsegna ordiniInConsegna = new OrdiniInConsegna();
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("ordini");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 
-			//Lettura
-		
-			Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+		//Lettura
 
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            ja.put(output);
-				Ordine curr = gson.fromJson(obj.toString(), Ordine.class);
-				if (curr.getStatoOrdine().getStato().equals("IN_CONSEGNA"))
-					ordiniInConsegna.getOrdini().add(curr);
-	        }
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
-		}
+		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+
+		
+		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
+			ordiniInConsegna.getOrdini().add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
+		}	
 		return ordiniInConsegna;
 	}
 
 
 	private void aggiornaNonConsegnato(String id) {
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Lettura
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
+		
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
 
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
 			
-			DBCollection collection = database.getCollection("ordini");
-			BasicDBObject query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        Ordine result = gson.fromJson(collection.findOne(query).toString(), Ordine.class);
-	        result.setStatoOrdine(new NonConsegnato(result));
+		}).registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+		
+		Document query = new Document();
+		query.put("_id", new ObjectId(id));
+		Ordine result = gson.fromJson(collection.find(query).cursor().next().toJson(), Ordine.class);
+		result.setStatoOrdine(new NonConsegnato(result));
 
-			//Modifica
-			query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        BasicDBObject newDocument = new BasicDBObject();
-	        newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", newDocument);
-	        collection.update(query, updateObject);
-	        
-	      //Mando email
-			this.buildEmailAndSend(result, "ok");
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		//Modifica
+		Document newDocument = new Document();
+		newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
+		 
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+		 
+		collection.updateOne(query, updateObject);
+		
+     //Mando email
+		this.buildEmailAndSend(result, "ok");
 		
 	}
 
 
 	private void aggiornaConsegnato(String id) {
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Lettura
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
-			
-			DBCollection collection = database.getCollection("ordini");
-			BasicDBObject query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        Ordine result = gson.fromJson(collection.findOne(query).toString(), Ordine.class);
-	        result.setStatoOrdine(new Consegnato(result));
-
-			//Modifica
-			query = new BasicDBObject();
-	        query.put("_id", new ObjectId(id));
-	        BasicDBObject newDocument = new BasicDBObject();
-	        newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", newDocument);
-	        collection.update(query, updateObject);
-	        
-	      //Mando email
-			this.buildEmailAndSend(result, "ok");
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
 		
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
+			
+		}).registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
+		
+		Document query = new Document();
+		query.put("_id", new ObjectId(id));
+		Ordine result = gson.fromJson(collection.find(query).cursor().next().toJson(), Ordine.class);
+		result.setStatoOrdine(new Consegnato(result));
+
+		//Modifica
+		Document newDocument = new Document();
+		newDocument.put("statoOrdine", result.getStatoOrdine().getStato());
+		 
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+		 
+		collection.updateOne(query, updateObject);
+		
+     //Mando email
+		this.buildEmailAndSend(result, "ok");
 	}
 	
 	private void buildEmailAndSend(Ordine ordine, String azione) {

@@ -2,7 +2,6 @@ package gestioneMagazzino;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,18 +20,14 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
-import model.ordine.OrdiniTotali;
 import model.prodottoECarrello.Magazzino;
 import model.prodottoECarrello.Prodotto;
-import model.prodottoECarrello.RigaCarrello;
 
 public class GestioneProdottiController extends HttpServlet {
 
@@ -99,115 +92,90 @@ public class GestioneProdottiController extends HttpServlet {
 
 	private void modificaProdotto(Prodotto p) {
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-				
-			DBCollection collection = database.getCollection("prodotti");
-			
-	       
-	       
-			BasicDBObject query = new BasicDBObject();
-        	query.put("_id", p.get_id());
-	        BasicDBObject newDocument = new BasicDBObject();
-	        newDocument.put("imagePath", p.getImagePath());
-	        newDocument.put("nome", p.getNome());
-	        newDocument.put("marca", p.getMarca());
-	        newDocument.put("categoria", p.getCategoria());
-	        newDocument.put("provenienza", p.getProvenienza());
-	        newDocument.put("prezzo", p.getPrezzo());
-	        newDocument.put("sconto", p.getSconto());
-	        newDocument.put("unitaDisponibili", p.getUnitaDisponibili());
-	        newDocument.put("disponibile", p.getDisponibile());
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", newDocument);
-	        collection.update(query, updateObject);
-		        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");			
+      
+      
+		Document query = new Document();
+		query.put("_id", p.get_id());
+		Document newDocument = new Document();
+		newDocument.put("imagePath", p.getImagePath());
+		newDocument.put("nome", p.getNome());
+		newDocument.put("marca", p.getMarca());
+		newDocument.put("categoria", p.getCategoria());
+		newDocument.put("provenienza", p.getProvenienza());
+		newDocument.put("prezzo", p.getPrezzo());
+		newDocument.put("sconto", p.getSconto());
+		newDocument.put("unitaDisponibili", p.getUnitaDisponibili());
+		newDocument.put("disponibile", p.getDisponibile());
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+		collection.updateOne(query, updateObject);
 	}
 
 	private void inserisciProdotto(Prodotto p) {
 
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("prodotti");
-	        BasicDBObject document = new BasicDBObject();
-	        document.put("imagePath", p.getImagePath());
-	        document.put("nome", p.getNome());
-	        document.put("marca", p.getMarca());
-	        document.put("categoria", p.getCategoria());
-	        document.put("provenienza", p.getProvenienza());
-	        document.put("prezzo", p.getPrezzo());
-	        document.put("sconto", p.getSconto());
-	        document.put("unitaDisponibili", p.getUnitaDisponibili());
-	        document.put("disponibile", p.getDisponibile());
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
+		
+		//Inserimento
+		Document document = new Document();
+		document.put("nome", p.getNome());
+		document.put("imagePath", p.getImagePath());
+		document.put("marca", p.getMarca());
+		document.put("categoria", p.getCategoria());
+		document.put("provenienza", p.getProvenienza());
+		document.put("prezzo", p.getPrezzo());
+		document.put("sconto", p.getSconto());
+		document.put("unitaDisponibili", p.getUnitaDisponibili());
+		document.put("disponibile", p.getDisponibile());
 
-	        collection.insert(document);
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		collection.insertOne(document);
 		
 	}
 
 	private Magazzino mostraMagazzino() {
-		Magazzino result = new Magazzino();	
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("prodotti");
+		Magazzino magazzino = new Magazzino();	
+		Set<Prodotto> result = new HashSet<>();
+		
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
 
-			//Lettura
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
 			
-			//Necessario registrare la callback siccome Gson non traduce correttamente gli ObjectID di mongoDB
-	        Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).create();
-	        
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            Prodotto p = gson.fromJson(obj.toString(), Prodotto.class);
-	            result.getProdotti().add(p);
-	            ja.put(output);
-	        }
-    
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		}).create();
+		
+		FindIterable<Document> foundData = collection.find(new Document());
+		for (Document d : foundData) {
+			Prodotto curr = gson.fromJson(d.toJson(), Prodotto.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(d.toJson().toString());
 		}
-		return result;
+		
+		magazzino.setProdotti(result);
+		return magazzino;
 	}
 	
 	private void eliminaProdotto(Prodotto p) {
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("prodotti");
-			BasicDBObject deleteQuery = new BasicDBObject();
-	        deleteQuery.put("nome", p.getNome());
-	        collection.remove(deleteQuery);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
+		
+		//Eliminazione
+		Document deleteQuery = new Document();
+		deleteQuery.put("_id", p.get_id());
+		collection.deleteOne(deleteQuery);
 	}
 }

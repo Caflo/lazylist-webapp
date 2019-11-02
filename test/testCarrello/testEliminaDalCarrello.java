@@ -1,28 +1,14 @@
 package testCarrello;
 
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.bson.types.ObjectId;
+import org.bson.Document;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-
-import model.prodottoECarrello.Carrello;
-import model.prodottoECarrello.RigaCarrello;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 public class testEliminaDalCarrello {
 
@@ -31,18 +17,13 @@ public class testEliminaDalCarrello {
 		
 		String id = "5db572398949ee2631bc1c6b";
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("carrello");
-			BasicDBObject deleteQuery = new BasicDBObject();
-	        deleteQuery.put("idProdotto", id);
-	        collection.remove(deleteQuery);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
+		
+		//Eliminazione
+		Document deleteQuery = new Document();
+		deleteQuery.put("idProdotto", id);
+		collection.deleteOne(deleteQuery);
 	}
 }

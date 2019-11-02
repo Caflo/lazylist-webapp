@@ -2,13 +2,13 @@ package testCarrello;
 
 import java.net.UnknownHostException;
 
-import org.bson.types.ObjectId;
+import org.bson.Document;
 import org.junit.Test;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 public class testModificaQuantita {
 
@@ -18,22 +18,17 @@ public class testModificaQuantita {
 		String id = "5db572398949ee2631bc1c6b";
 		Integer nuovaQuantita = 3;
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Modifica
-			DBCollection collection = database.getCollection("carrello");
-			BasicDBObject query = new BasicDBObject();
-	        query.put("idProdotto", id);
-	        BasicDBObject newDocument = new BasicDBObject();
-	        newDocument.put("quantitaScelta", nuovaQuantita);
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", newDocument);
-	        collection.update(query, updateObject);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
+		
+		//Modifica
+		Document query = new Document();
+		query.put("idProdotto", id);
+		Document newDocument = new Document();
+		newDocument.put("quantitaScelta", nuovaQuantita);
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+		collection.updateOne(query, updateObject);
 	}
 }

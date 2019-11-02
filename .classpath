@@ -22,6 +22,6 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/simple-java-mail-5.5.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="web/WEB-INF/lib/mongo-java-driver-2.12.3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/mongo-java-driver-3.11.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

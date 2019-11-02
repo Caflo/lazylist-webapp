@@ -86,118 +86,20 @@ public class GestioneFasceOrarieController extends HttpServlet {
 		
 	}
 
-	private void inserisciFascia(FasciaOraria f) {
-		
-		DateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
-		DateFormat formatOrario = new SimpleDateFormat("HH:mm"); //uso sempre quello di Date perche' Gson ha problemi con la serializzazione di java.time
-		final DateTimeFormatter dtf = new DateTimeFormatterBuilder() //mi serve per avere Giovedi al posto di Thursday
-		        .appendOptional(DateTimeFormatter.ofPattern("EEEE"))
-		        .toFormatter(Locale.ITALIAN);
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Inserimento
-			DBCollection collection = database.getCollection("fasceOrarie");
-	        BasicDBObject document = new BasicDBObject();
-		    document.put("oraInizio", f.getOraInizio());
-		    document.put("oraFine", f.getOraFine());
-		    document.put("giorno", f.getGiorno());
-		    document.put("costoConsegna", f.getCostoConsegna());
-
-		    collection.insert(document);
-	        
-	        System.out.println(document.toString());
-	        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Set<FasciaOraria> mostraFasceOrarie() {
-
-		Set<FasciaOraria> result = new HashSet<>();
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("fasceOrarie");
-
-			//Lettura (anche qui, siccome c'e' l'id, serve deserializzarlo correttamente
-			Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
-
-				@Override
-				public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					// TODO Auto-generated method stub
-					return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
-				}
-				
-			}).create();
-			
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            FasciaOraria rc = gson.fromJson(output.toString(), FasciaOraria.class);
-	            result.add(rc);
-	            ja.put(output);
-	        }
-	             
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
-		}		
-		return result;
-	}
-	
-	private void eliminaFascia(String id) {
-
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("fasceOrarie");
-			BasicDBObject deleteQuery = new BasicDBObject();
-	        deleteQuery.put("_id", new ObjectId(id));
-	        collection.remove(deleteQuery);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+	private void eliminaFascia(String idFascia) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	private void modificaFascia(FasciaOraria f) {
-		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-				
-			DBCollection collection = database.getCollection("prodotti");
-			
-	       
-	       
-			BasicDBObject query = new BasicDBObject();
-        	query.put("_id", f.get_id());
-        	 BasicDBObject document = new BasicDBObject();
- 		    document.put("oraInizio", f.getOraInizio());
- 		    document.put("oraFine", f.getOraFine());
- 		    document.put("giorno", f.getGiorno());
- 		    document.put("costoConsegna", f.getCostoConsegna());
-	        BasicDBObject updateObject = new BasicDBObject();
-	        updateObject.put("$set", document);
-	        collection.update(query, updateObject);
-		        
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		// TODO Auto-generated method stub
 		
 	}
-	
+
+	private void inserisciFascia(FasciaOraria f) {
+		// TODO Auto-generated method stub
+		
+	}
 }
+
+	

@@ -2,30 +2,28 @@ package testOrdine;
 
 import java.net.UnknownHostException;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+
 
 public class testEliminaOrdine {
 	@Test
 	public void test() {
 		
-		String idOrdine = "5db57e568949ce5c2beba47d";
+		String idOrdine = "5dbd4f78b75c376bca33920b";
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("ordini");
-	        collection.remove(new BasicDBObject("_id", new ObjectId(idOrdine)));
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("ordini");
+		
+		//Eliminazione
+		collection.deleteOne(new Document("_id", new ObjectId(idOrdine)));
 	}
 }

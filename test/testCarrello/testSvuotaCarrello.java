@@ -1,37 +1,25 @@
 package testCarrello;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.HashSet;
 
+import org.bson.Document;
 import org.junit.Test;
 
-import com.google.gson.stream.JsonWriter;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-
-import model.prodottoECarrello.RigaCarrello;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 public class testSvuotaCarrello {
 	
 	@Test
 	public void test() {
 		
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("carrello");
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Svuota tutto
-			DBCollection collection = database.getCollection("carrello");
-			collection.drop();    
-			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		//Svuota tutto
+		collection.drop();
 	}
 }

@@ -2,13 +2,17 @@ package testProdotti;
 
 import java.net.UnknownHostException;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+
 
 public class testEliminaProdotto {
 
@@ -17,18 +21,13 @@ public class testEliminaProdotto {
 		
 		ObjectId id = new ObjectId("5db57f1589495b291d1ffbb5");
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			
-			//Eliminazione
-			DBCollection collection = database.getCollection("prodotti");
-			BasicDBObject deleteQuery = new BasicDBObject();
-	        deleteQuery.put("_id", id);
-	        collection.remove(deleteQuery);
-    
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
+		
+		//Eliminazione
+		Document deleteQuery = new Document();
+		deleteQuery.put("_id", id);
+		collection.deleteOne(deleteQuery);
 	}
 }

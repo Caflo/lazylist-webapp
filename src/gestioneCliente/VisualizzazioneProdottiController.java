@@ -1,7 +1,7 @@
 package gestioneCliente;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,18 +11,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.google.gson.Gson;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Sorts.*;
+
 
 import model.prodottoECarrello.Catalogo;
 import model.prodottoECarrello.Prodotto;
@@ -61,67 +67,58 @@ public class VisualizzazioneProdottiController extends HttpServlet {
 
 	private Catalogo mostraCatalogo() {
 		
+		Catalogo catalogo = new Catalogo();	
 		Set<Prodotto> result = new HashSet<>();
-		Catalogo c = new Catalogo();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("prodotti");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
 
-			//Lettura
-			Gson gson = new Gson();
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-			BasicDBObject orderBy = new BasicDBObject();
-			orderBy.put("nome", 1);
-	        DBCursor cursor = collection.find(searchQuery).sort(orderBy);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            Prodotto p = gson.fromJson(output.toString(), Prodotto.class);
-	            result.add(p);
-	            ja.put(output);
-	        }
-    
-	        
-	        c.setProdotti(result);
-	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		//Lettura
+		Gson gson = new GsonBuilder().registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
+
+			@Override
+			public ObjectId deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				// TODO Auto-generated method stub
+				return new ObjectId(arg0.getAsJsonObject().get("$oid").getAsString());
+			}
+			
+		}).create();
+		
+		Bson sort = descending("nome");
+		FindIterable<Document> foundData = collection.find().sort(sort);
+		for (Document d : foundData) {
+			Prodotto curr = gson.fromJson(d.toJson(), Prodotto.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(d.toJson().toString());
 		}
-		return c;
+		
+		catalogo.setProdotti(result);
+		return catalogo;
+
 	}
 	
 	private Set<Prodotto> filtraProdotti(String filtro) {
 
 		Set<Prodotto> result = new HashSet<>();
 		
-		try {
-			MongoClient mongoClient = new MongoClient("localhost" , 27017);
-			DB database = mongoClient.getDB("testDB");
-			DBCollection collection = database.getCollection("prodotti");
+		MongoClient mongoClient = MongoClients.create();
+		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoCollection<Document> collection = database.getCollection("prodotti");
 
-			//Lettura
-			Gson gson = new Gson();
-			JSONArray ja = new JSONArray();
-			BasicDBObject searchQuery = new BasicDBObject();
-			searchQuery.put("categoria", filtro);
-	        DBCursor cursor = collection.find(searchQuery);
-	        while (cursor.hasNext()) {
-	            DBObject obj = cursor.next();
-	            JSONObject output = new JSONObject(JSON.serialize(obj));
-	            Prodotto p = gson.fromJson(output.toString(), Prodotto.class);
-	            result.add(p);
-	            ja.put(output);
-	        }
-    	        
-	        //DEBUG
-	        System.out.println(ja.toString());
-		} catch (UnknownHostException | JSONException e) {
-			e.printStackTrace();
+		//Lettura
+		Gson gson = new Gson();
+		Document filter = new Document();
+		filter.put("categoria", filtro);
+		MongoCursor<Document> foundData = collection.find(filter).sort(descending("_id")).cursor();
+		while (foundData.hasNext()) {
+		    Document obj = foundData.next();
+			Prodotto curr = gson.fromJson(obj.toJson(), Prodotto.class);
+			result.add(curr);
+			//DEBUG
+		    System.out.println(obj.toJson().toString());
 		}
 		return result;
 		
