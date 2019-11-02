@@ -91,17 +91,17 @@ public class OrdiniInConsegnaController extends HttpServlet {
 		MongoCollection<Document> collection = database.getCollection("ordini");
 
 		//Lettura
-
 		Gson gson = new GsonBuilder().registerTypeAdapter(Ordine.class, new OrdineDeserializer()).create();
 
-		
 		MongoCursor<Document> foundData = collection.find(new Document()).cursor();
 		while (foundData.hasNext()) {
 		    Document obj = foundData.next();
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
-			ordiniInConsegna.getOrdini().add(curr);
-			//DEBUG
-		    System.out.println(curr.toString());
+			if (curr.getStatoOrdine().getStato().equals("IN_CONSEGNA")) {
+				ordiniInConsegna.getOrdini().add(curr);
+				//DEBUG
+				System.out.println(curr.toString());
+			}
 		}	
 		return ordiniInConsegna;
 	}
@@ -138,7 +138,7 @@ public class OrdiniInConsegnaController extends HttpServlet {
 		 
 		collection.updateOne(query, updateObject);
 		
-     //Mando email
+		//Mando email
 		this.buildEmailAndSend(result, "ok");
 		
 	}

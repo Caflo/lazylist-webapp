@@ -245,9 +245,11 @@ public class ReadManager {
 		while (foundData.hasNext()) {
 		    Document obj = foundData.next();
 			Ordine curr = gson.fromJson(obj.toJson(), Ordine.class);
-			ordiniInConsegna.getOrdini().add(curr);
-			//DEBUG
-		    System.out.println(curr.toString());
+			if (curr.getStatoOrdine().getStato().equals("IN_CONSEGNA")) {
+				ordiniInConsegna.getOrdini().add(curr);
+				//DEBUG
+			    System.out.println(curr.toString());
+			}
 		}		
 		return ordiniInConsegna;
 	}
