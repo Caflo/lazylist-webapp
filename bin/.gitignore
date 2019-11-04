@@ -1,3 +1,13 @@
 /crud/
 /inizializzazione/
 /testMail/
+/gestioneCliente/
+/gestioneCorriere/
+/gestioneMagazzino/
+/model/
+/notificaEmail/
+/serializer/
+/testCarrello/
+/testFasceOrarie/
+/testOrdine/
+/testProdotti/

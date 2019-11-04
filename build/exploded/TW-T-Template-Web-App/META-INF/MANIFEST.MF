@@ -1,4 +1,8 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.10.5
+<<<<<<< HEAD
 Created-By: 13.0.1+9 (Oracle Corporation)
+=======
+Created-By: 11.0.2+9-LTS (Oracle Corporation)
+>>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp
 
