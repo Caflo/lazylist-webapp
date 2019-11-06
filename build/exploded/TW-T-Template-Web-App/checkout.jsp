@@ -92,12 +92,12 @@
 								</div>
 							</div>
 							
-							<div class="col-md-6">
+							<!-- div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">Email</label> <input type="text"
 										name="email" class="form-control" placeholder="" required>
 								</div>
-							</div>
+							</div> -->
 
 							<div class="w-100"></div>
 							<div class="col-md-6">
