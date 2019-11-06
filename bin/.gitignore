@@ -1,4 +1,5 @@
 /crud/
+<<<<<<< HEAD
 /gestioneCliente/
 /gestioneCorriere/
 /gestioneMagazzino/
@@ -8,5 +9,17 @@
 /testCarrello/
 /testFasceOrarie/
 /testMail/
+=======
+/inizializzazione/
+/testMail/
+/gestioneCliente/
+/gestioneCorriere/
+/gestioneMagazzino/
+/model/
+/notificaEmail/
+/serializer/
+/testCarrello/
+/testFasceOrarie/
+>>>>>>> branch 'master' of https://github.com/Caflo/lazylist-webapp.git
 /testOrdine/
 /testProdotti/
