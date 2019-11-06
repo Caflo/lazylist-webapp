@@ -10,11 +10,11 @@ public class Ordine {
 
 	private ObjectId _id;
 	private Integer idCliente;
-	private String emailCliente;
 	private String nomeCliente;
 	private String cognomeCliente;
 	private Date dataConsegna;
 	private String indirizzoConsegna;
+	private String emailCliente;
 	private String CAP;
 	private Double costoTotale;
 	private FasciaOraria fasciaOraria;
@@ -37,12 +37,6 @@ public class Ordine {
 	}
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
-	}
-	public String getEmailCliente() {
-		return emailCliente;
-	}
-	public void setEmailCliente(String emailCliente) {
-		this.emailCliente = emailCliente;
 	}
 	public String getNomeCliente() {
 		return nomeCliente;
@@ -68,6 +62,15 @@ public class Ordine {
 	public void setIndirizzoConsegna(String indirizzoConsegna) {
 		this.indirizzoConsegna = indirizzoConsegna;
 	}
+	
+	public String getEmailCliente() {
+		return emailCliente;
+	}
+
+	public void setEmailCliente(String emailCliente) {
+		this.emailCliente = emailCliente;
+	}
+
 	public String getCAP() {
 		return CAP;
 	}

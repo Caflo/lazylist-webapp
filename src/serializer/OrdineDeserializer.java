@@ -50,12 +50,12 @@ public class OrdineDeserializer implements JsonDeserializer<Ordine> {
 		result.set_id(_id);
 		Integer idCliente = jo.get("idCliente").getAsInt();
 		result.setIdCliente(idCliente);
-		String emailCliente = jo.get("emailCliente").getAsString();
-		result.setEmailCliente(emailCliente);
 		String nomeCliente = jo.get("nomeCliente").getAsString();
 		result.setNomeCliente(nomeCliente);
 		String cognomeCliente = jo.get("cognomeCliente").getAsString();
 		result.setCognomeCliente(cognomeCliente);
+		String emailCliente = jo.get("emailCliente").getAsString();
+		result.setEmailCliente(emailCliente);
 		Date dataConsegna = null;
 		try {
 			dataConsegna = df.parse(jo.get("dataConsegna").getAsString());

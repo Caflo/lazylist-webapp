@@ -1,0 +1,12 @@
+/crud/
+/gestioneCliente/
+/gestioneCorriere/
+/gestioneMagazzino/
+/model/
+/notificaEmail/
+/serializer/
+/testCarrello/
+/testFasceOrarie/
+/testMail/
+/testOrdine/
+/testProdotti/

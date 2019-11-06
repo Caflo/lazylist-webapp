@@ -89,7 +89,7 @@ public class OrdineController extends HttpServlet {
 			resp.getOutputStream().print(output); //lo restituisco alla callback ajax
 		}
 		else if (tipoOperazione.equals("Effettua ordine")) { //FORM click su effettua ordine
-			String email = req.getParameter("email");
+//			String email = req.getParameter("email");
 			String nome = req.getParameter("nome");
 			String cognome = req.getParameter("cognome");
 			String indirizzo = req.getParameter("indirizzo");
@@ -105,7 +105,7 @@ public class OrdineController extends HttpServlet {
 			Carrello c = this.mostraCarrello();
 			Ordine o = new Ordine();
 			o.setIdCliente(1);
-			o.setEmailCliente(email);
+			o.setEmailCliente("caflo1997@gmail.com");
 			o.setNomeCliente(nome);
 			o.setCognomeCliente(cognome);
 			o.setIndirizzoConsegna(indirizzo);
